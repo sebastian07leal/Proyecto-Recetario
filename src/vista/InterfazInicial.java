@@ -1,6 +1,6 @@
 package vista;
 
-import controlador.Usuario;
+
 
 public class InterfazInicial extends javax.swing.JFrame {
 
@@ -204,10 +204,8 @@ public class InterfazInicial extends javax.swing.JFrame {
         //Guarda lo ingrezado en el texto
         nombre = ingresadoUser.getText(); 
         contrasena = ingresadoPasword.getText(); 
+
         
-        //llama al metodo encargado de realizar la validacion
-        Usuario validar = new Usuario(); 
-        validar.usuario(nombre, contrasena); 
         
         
     }//GEN-LAST:event_eventoConfirmarActionPerformed
@@ -232,32 +230,11 @@ public class InterfazInicial extends javax.swing.JFrame {
 
     private void eventoPestanaRegisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eventoPestanaRegisMouseClicked
         
-        Usuario validar = new Usuario(); 
-              
-        validar.registro(); 
-                
-        
-       
-        
+
+               
     }//GEN-LAST:event_eventoPestanaRegisMouseClicked
 
 
-    /*public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-       //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        
-        //</editor-fold>
-
-        /* Create and display the form */
-        /*java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new InterfazInicial().setVisible(true);
-            }
-        });
-    }*/
     
     //metodo principal de la clase
     public static void interInit(){
