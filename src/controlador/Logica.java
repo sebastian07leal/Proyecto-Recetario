@@ -1,49 +1,81 @@
 package controlador;
 
-import java.util.ArrayList;
 import modelo.*;
 
 public class Logica {
 
     //Este objeto nos permite conectarnos con la clase menu
     private Operadora operadora;
-    //Estructura de datos para el manejo de las recetas y usuarios
-    private ArrayList<Receta> recetas;
-    private ArrayList<Usuario> usuario;
 
     //estos usuarios va a ser momentaneos mientras se implementan las interfaces graficas
-    private String userProfe = "profe";
-    private String pasProfe = "profe123";
     private String user = "Sebastian";
     private String pas = "123123";
+
+    //Variables reales; 
+    private String nombreRecibido;
+    private String contrasenaRecibida;
+    private String confirmContrasena;
+    private String palabraRecibida;
+    private Usuario usuario;    //Este obgeto se enviara para su manejo en archivos de persistencia
 
     public Logica() {
     }
 
     //validara si el usuario es correcto o no
-    public void ValidarUsuario(String usuarioIngre, String paswIngre) {
-
+    public void ValidarUsuario(String usuarioEnviado, String contrasenaEnviada) {
         operadora = new Operadora();
-        //Se debe realizar la comparacion con obgetos 
         //Solo se ha comparado sebastian 
-        if (usuarioIngre.equals(user)) {
-            if (paswIngre.equals(pas)) {
+        if (usuarioEnviado.equals(user)) {
+            System.out.println();
+            System.out.println("El usuario o contraseña ingresados no son correctos, intentelo de nuvo");
+            operadora.getMenu().iniciarSecion();
+            if (contrasenaEnviada.equals(pas)) {
                 operadora.getMenu().generarMenu();
-
             }
         } else {
             System.out.println();
             System.out.println("El usuario o contraseña ingresados no son correctos, intentelo de nuvo");
             operadora.getMenu().iniciarSecion();
         }
-
     }
 
     //valida el registro hecho
-    public boolean ValidarRegistro() {
+    public boolean ValidarRegistro(String nombreEnviado, String contrasenaEnviada, String contrasenaConfirmada, String palaEnviada) {
+        this.operadora = new Operadora();
+        boolean contraIguales = false;
+        this.nombreRecibido = nombreEnviado;
+        this.contrasenaRecibida = contrasenaEnviada;
+        this.confirmContrasena = contrasenaConfirmada;
+        this.palabraRecibida = palaEnviada;
 
-        operadora = new Operadora();
-        return true;
+        if (this.contrasenaRecibida.equals(this.confirmContrasena)) {
+            contraIguales = true;
+        }
+        //Se crea el obgeto  usuario
+        this.usuario = new Usuario(this.nombreRecibido, this.contrasenaRecibida, this.palabraRecibida);
+ 
+        //Se envia el obgeto para guardarlo con persistencia     
+        operadora.getArchivar().guardar(this.usuario);
+
+        return contraIguales;
+    }
+    
+    public boolean validarExistencia(Usuario usuarioEnProceso){
+        
+        return false;
+    }
+
+    //Get y Set de las variables basicas 
+    public String getNombreRecibido() {
+        return nombreRecibido;
+    }
+
+    public String getContrasenaRecibida() {
+        return contrasenaRecibida;
+    }
+
+    public String getPalabraRecibida() {
+        return palabraRecibida;
     }
 
 }

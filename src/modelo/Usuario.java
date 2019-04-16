@@ -1,27 +1,40 @@
 package modelo;
 
-public class Usuario {
+import java.io.Serializable;
+import java.util.UUID;  //Esta libreria es necesaria para generar el id 
 
-    private String id; //El id se generara automaticamente 
+public class Usuario implements Serializable{
+
+    private UUID id; //El id se generara automaticamente Segun el estandar RFC4122
     private String nombre;
-    private String contrsena; 
-    private String preguntaRecuperacion; 
+    private String contrasena; 
+    private String palabraDeRecuperaion; 
     
     //Constructor para comunicar 
     public Usuario(){
-        
     }
+    
     //Constructor para agregar un nuevo usuario
-    public Usuario(String nombre, String contrasena, String preguntasRecuperacion){
-        
+    public Usuario(String nombre, String contrasena, String recuperacion){      
         this.nombre = nombre; 
-        this.contrsena = contrasena; 
-        this.preguntaRecuperacion = preguntasRecuperacion; 
-        
+        this.contrasena = contrasena; 
+        this.palabraDeRecuperaion = recuperacion; 
+        this.id = generarID();        
+    }
+    
+    //Este metodo genera el ID segun el estandar UUID
+    public UUID generarID(){   
+        UUID idusuario = UUID.randomUUID();
+        return idusuario;
+    }
+    
+    //Es necesario para visualizar de forma correcta lo creado en este obgeto
+    public String toString(){
+        return "***"+"El Id del usuario es: "+ id +", Nombre: " + nombre + ", Contraseña: " + contrasena + ", Palabra de recuperacion:" + palabraDeRecuperaion+"***";
     }
 
 //Get y Set 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -34,19 +47,19 @@ public class Usuario {
     }
 
     public String getContrsena() {
-        return contrsena;
+        return contrasena;
     }
 
     public void setContrsena(String contrsena) {
-        this.contrsena = contrsena;
+        this.contrasena = contrsena;
     }
 
-    public String getPreguntaRecuperacion() {
-        return preguntaRecuperacion;
+    public String getPalabraDeRecuperacion() {
+        return palabraDeRecuperaion;
     }
 
-    public void setPreguntaRecuperacion(String preguntaRecuperacion) {
-        this.preguntaRecuperacion = preguntaRecuperacion;
+    public void setPalabraDeRecuperacion(String preguntaRecuperacion) {
+        this.palabraDeRecuperaion = palabraDeRecuperaion;
     }
     
     

@@ -1,7 +1,7 @@
 package controlador;
 
-import vista.*;
 import modelo.*;
+import vista.*;
 
 //Esta clase se va a encargar de comunicarse con las demas clases y enviar la respuesta 
 public class Operadora {
@@ -11,6 +11,7 @@ public class Operadora {
     private final Menu menu;
     private final Logica logica;
     private final Usuario usuario;
+    private final Archivar archivar;
 
     public Operadora() {
 
@@ -18,6 +19,8 @@ public class Operadora {
         this.menu = new Menu();
         this.logica = new Logica();
         this.usuario = new Usuario();
+        this.archivar = new Archivar();
+        
        
 
     }
@@ -32,6 +35,18 @@ public class Operadora {
     
     public Logica getLogica(){
         return logica;
+    }
+    
+    public Usuario getUsuario(){
+        return usuario;
+    }
+    
+    public  Archivar getArchivar(){
+        return archivar; 
+    }
+
+    Object getArchivar(Usuario usuario) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

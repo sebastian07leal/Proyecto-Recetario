@@ -1,10 +1,11 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.*;
 
 
 
-public class Receta {
+public class Receta implements Serializable{
 
     private int id; //El id es un numero único con el cual va a contar cada receta para su busqeuda en base de datos, este id se generara automaticamente
     private String nombre;
