@@ -44,6 +44,37 @@ public class Archivar {
         }
         return creado;
     }
+    
+    
+    //Este metodo se sobrecarga para poder modificar partes de una lista y sobre escribirla, a diferencia del metodo anterior este recibe listas completas, el otro añade objetos
+    public boolean guardar(ArrayList<Usuario> listaEnviada) {
+        boolean creado = false; 
+        //Trea primero lo guardado y despues guarda apartir del ultimo indice
+        traerListadoDeUsuarios();
+
+        //Se sobre escribe la lista ya creada con la lista modificada 
+        this.listaDeUsuarios = listaEnviada; 
+
+        try {
+
+            //Se crea el archivo y se guarda en la ubicacion por defecto
+            nuevo = new File("Usuarios.txt");
+
+            //Se debe encontrar una extencion generica del archivo
+            envioDeDatos = new ObjectOutputStream(new FileOutputStream(nuevo));
+            envioDeDatos.writeObject(this.listaDeUsuarios);    //Se envia el objeto para guardar en el archivo espesificado anteriormente
+            envioDeDatos.close();
+            
+            creado = true; 
+        } catch (java.lang.RuntimeException e) {
+            System.out.println("Revisa donde se esta almacenando el dato regresado java.lang.RuntimeException ");
+            creado = false;
+        } catch (Exception e) {
+            System.out.println("Entro a otro error ");
+            creado = false; 
+        }
+        return creado;
+    }    
 
     /*Para que la persistencia afuncione antes de realizar la creacion de un nuevo usuario es necesario 
      revisar que contiene el archivo antes creado*/
@@ -65,7 +96,6 @@ public class Archivar {
     public ArrayList<Usuario> getListaDeUsuarios() {
         return this.listaDeUsuarios;
     }
-
     public File getNuevo() {
         return this.nuevo;
     }

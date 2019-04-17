@@ -12,6 +12,7 @@ public class Menu {
     private String nombreIngresado = "";
     private String contrasenaIngresada = "";
     private String palabraIngresada = "";
+    private Usuario datosDeUsuario; 
 
     //Este constructor está diseñado para la comunicacion entre clases 
     public Menu() {
@@ -101,7 +102,7 @@ public class Menu {
         String confirmar = "";
         do {
             System.out.println("Acontinuacion ingrese los datos espesificados \n");
-            System.out.println("Ingrese su nombre de usuario, no puede contener caracteres especiales");
+            System.out.println("Ingrese su nombre de usuario, no se podra cambiar posteriormente");
             this.nombreIngresado = sc.nextLine();
             System.out.println("Ingrese su contraseña ");
             this.contrasenaIngresada = sc.nextLine();
@@ -118,7 +119,7 @@ public class Menu {
                 //Si el registro es validado y crado se confirma 
                 if (operadora.getLogica().ValidarRegistro(this.nombreIngresado, this.contrasenaIngresada, contrasena2, this.palabraIngresada)) {
                     System.out.println("El usuario a sido creado con exito\n");
-                    generarMenu();
+                    generarMenu(operadora.getLogica().ubicacionDeUsuarioPorIndice(nombreIngresado)); //Se le debe enviar el indice donde esta el usuario
                 } else {
                     System.out.println("Ha abido un error al crear el usuario");
                 }
@@ -139,9 +140,13 @@ public class Menu {
     }
 
     //Este metodo simula la interfaz de usuario desde el menu (Home)
-    public void generarMenu() {
+    public void generarMenu(int indiceUsuario) {
+        operadora = new Operadora(); 
         sc = new Scanner(System.in);
+        datosDeUsuario = operadora.getLogica().objetoUsuarioEnIndice(indiceUsuario); 
         byte exit = -1;
+        
+        
         do {
             System.out.println("\n");
             System.out.println("*Acontinuacion ingrese la accion que desea realizar \n");
@@ -167,7 +172,8 @@ public class Menu {
                         System.out.println("Estoy viendo recetas favoritas");
                         break;
                     case 5:
-                        System.out.println("Editar datos de cuenta ");
+                        exit = -1; 
+                        menuEditarPerfil(datosDeUsuario.getNombre()); //Enviar usuario
                         break;
                     case 6:
                         exit = -1; //Slago del ciclo
@@ -179,7 +185,7 @@ public class Menu {
                 }
             } catch (java.util.InputMismatchException e) {
                 System.out.println("Lo siento solo se permite ingrezar numeros enteros");
-                generarMenu();  //Hago  una llamada de nuevo para reiterar el ciclo 
+                generarMenu(indiceUsuario);  //Hago  una llamada de nuevo para reiterar el ciclo 
             }
         } while (exit == 0);
     }
@@ -197,6 +203,7 @@ public class Menu {
 
         if (operadora.getLogica().comprobarPalabra(this.nombreIngresado, this.palabraIngresada)) {
             System.out.println("Porfavor cambia tu contraseña y palabra");
+            menuEditarPerfil(this.nombreIngresado);
         } else {
             System.out.println("la cuenta no existe o la palabra ingesada no coincide con la palabra de recuperacion");
             System.out.println("¿Desea intentarlo de nuevo? ingrese 'si',  de lo contrario oprima otra tecla");
@@ -206,6 +213,59 @@ public class Menu {
                 initPage();
             }
         }
+    }
+    
+    
+    public void menuEditarPerfil(String usuarioIngresado){
+        this.operadora = new Operadora();
+        operadora.getArchivar().traerListadoDeUsuarios();
+        String nueva=""; 
+        String nuevaConfirmacion;
+ 
+        sc = new Scanner(System.in);
+        int exit = -1;
+        do {
+            System.out.println("Ingrese a continuacion las valores que desea editar");
+            System.out.println("1. Cambiar contraseña");
+            System.out.println("2. Cambiar palabra de recuperacion");
+            System.out.println("3. Cancelar");
+            try {
+               switch(sc.nextInt()){
+                   case 1:
+                       exit = -1;
+                       System.out.println("Ingrese la nueva contraseña");
+                       nueva = sc.next(); 
+                       System.out.println("Ingrese de nuevo la contraseña");
+                       nuevaConfirmacion = sc.next(); 
+                       operadora.getLogica().cambiarContrasena(usuarioIngresado,nueva,nuevaConfirmacion); //Se hace la llamada al metodo cambiar contraseña
+                       break;
+                   case 2: 
+                       exit = -1;
+                       System.out.println("Ingrese la nueva palabra");
+                       nueva = sc.next(); 
+                       System.out.println("Ingrese de nuevo la palabra");
+                       nuevaConfirmacion = sc.next(); 
+                       System.out.println("Usuario afuera "+this.nombreIngresado);
+                       operadora.getLogica().cambiarPalabra(usuarioIngresado, nueva, nuevaConfirmacion); //Se hace la llamada al metodo cambiar palabra
+                       break;
+                   case 3:
+                       exit = -1; 
+                       break;
+                   default:
+                       System.out.println("Solo se permite ingresar numeros del 1 - 3 intentelo de nuevo");
+                       exit = 0;
+                       break;
+               }        
+            } catch (Exception e) {
+                System.out.println("Solo se permite ingrezar numeros intentelo de nuevo");
+                menuEditarPerfil(this.nombreIngresado);
+            }
+
+            
+            
+        } while (exit == 0);
+        
+        
     }
 
     //Get y Set permiten ver las contraseñas ingresadas por el usuario pero no cambiarlas

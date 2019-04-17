@@ -8,15 +8,24 @@ public class Principal {
     public static void main(String[] args) {
 
          Operadora operadora = new Operadora();
+         
+                  //Ver archivos en base de datos
+        operadora.getArchivar().traerListadoDeUsuarios();
+        System.out.println(operadora.getArchivar().getListaDeUsuarios());
+        System.out.println();
 
          //Inico del programa
          operadora.getMenu().initPage();
-//
-//
-
 
          
-//         System.out.println(operadora.getLogica().comprobarPalabra("Sebastian", " soy el creador?"));
+
+
+//         operadora.getMenu().menuEditarPerfil("Sebastian");////////El error se encuentra en que el menu editar necesita saber cual es su usuario
+         
+         
+        operadora.getArchivar().traerListadoDeUsuarios();
+        System.out.println(operadora.getArchivar().getListaDeUsuarios());
+        System.out.println();
 
     }
 
