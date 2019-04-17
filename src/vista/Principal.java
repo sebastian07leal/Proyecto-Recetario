@@ -9,10 +9,14 @@ public class Principal {
 
          Operadora operadora = new Operadora();
 
+         //Inico del programa
+         operadora.getMenu().initPage();
+//
+//
 
 
-        operadora.getMenu().initPage();
-
+         
+//         System.out.println(operadora.getLogica().comprobarPalabra("Sebastian", " soy el creador?"));
 
     }
 

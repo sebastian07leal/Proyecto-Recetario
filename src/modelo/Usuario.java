@@ -30,7 +30,7 @@ public class Usuario implements Serializable{
     
     //Es necesario para visualizar de forma correcta lo creado en este obgeto
     public String toString(){
-        return "***"+"El Id del usuario es: "+ id +", Nombre: " + nombre + ", Contraseña: " + contrasena + ", Palabra de recuperacion:" + palabraDeRecuperaion+"***";
+        return "\n***"+" El Id del usuario es: "+ id +", Nombre: " + nombre + ", Contraseña: " + contrasena + ", Palabra de recuperacion:" + palabraDeRecuperaion+" ***";
     }
 
 //Get y Set 
