@@ -1,6 +1,6 @@
 package controlador;
 
-import java.util.ArrayList;
+import java.util.*;
 import modelo.*;
 
 public class Logica {
@@ -15,7 +15,9 @@ public class Logica {
     private String confirmContrasena;
     private String palabraRecibida;
     private Usuario usuario;    //Este obgeto se enviara para su manejo en archivos de persistencia
+    private Receta receta; 
     private ArrayList<Usuario> listaMomentanea;
+    private ArrayList<Receta> listaRecetas; 
 
     public Logica() {
     }
@@ -61,7 +63,7 @@ public class Logica {
                 //Se crea el obgeto  usuario
                 this.usuario = new Usuario(this.nombreRecibido, this.contrasenaRecibida, this.palabraRecibida);
                 //Se envia el nuevo usuario para a guardar en el listado de archivos, si la respuesta es False significa que hubo un error al crear el usuario en el archivo     
-                usuarioCreado = operadora.getArchivar().guardar(this.usuario);
+                usuarioCreado = operadora.getArchivar().guardarUsuario(this.usuario);
             } else {
                 //Si las contraseñas no considen se debe volver a ingresar los datos
                 System.out.println("Las contraseñas ingresadas no considen, intentelo de nuevo\n");
@@ -208,6 +210,41 @@ public class Logica {
         }        
         
     }
+    
+    //Este metodo se encarga de enviar el id del a para crear el documento, si no existe
+    public boolean validarNuevaReceta(int indiceDeUsuario, String nombreR, String ingredientesR, String preparacionR, String descripcionR,int cantidadR){
+        boolean  respuestaMenu =  false; 
+        operadora = new Operadora();
+        boolean archivoEditado = false; 
+        boolean existeArchivo = false; 
+        boolean archivoCreado = false; 
+        String nombreUsuario;
+        UUID idDeUsuario;
+        //Se trae al obgeto y se trae el indice del usuario
+        this.usuario = objetoUsuarioEnIndice(indiceDeUsuario); //Se guardan todos los datos del usuario
+        idDeUsuario = usuario.getId(); //Se guarda el id del usuario para su manejo en la clase archivar 
+        nombreUsuario = usuario.getNombre(); 
+       this.receta = new Receta(nombreR, ingredientesR, preparacionR, false,  cantidadR, true, descripcionR);
+       /*Llama el metodo que se encarga de verificar si el archivo existe y si no crearlo*/
+        existeArchivo = operadora.getArchivar().buscarArchivo(nombreUsuario);
+        if(existeArchivo == true){
+            operadora.getArchivar().traerRcetas(nombreUsuario); //Si existe se trae el archivo para poder editarlo
+            listaRecetas = (ArrayList<Receta>) operadora.getArchivar().getRecetasDeUsuario().clone(); //Se crea una copia para su manejo
+            listaRecetas.add(receta);  //Se agrega el nuevo obgeto a la lista 
+           archivoEditado =  operadora.getArchivar().sobreEscribirReceta(nombreUsuario, listaRecetas); //se envia para si manejo en persistencia
+        }else{
+            archivoCreado = operadora.getArchivar().crearArchivoReceta(nombreUsuario, this.receta); //Retorna el estado del archivo
+        }
+        //Valida que no hallan errores al crear o editar los archivos, si hay errores envia false a clase menu
+        if(archivoEditado == true){
+            respuestaMenu = true; 
+        }else if(archivoCreado == true){
+            respuestaMenu = true; 
+        }
+        
+        
+        return  respuestaMenu; 
+    }
 
     //Get y Set de las variables basicas 
     public String getNombreRecibido() {
@@ -226,6 +263,14 @@ public class Logica {
         return posicionDelUsuario;
     }
 
+    public ArrayList<Receta> getListaRecetas() {
+        return listaRecetas;
+    }
+
+    public void setListaRecetas(ArrayList<Receta> listaReceta) {
+        this.listaRecetas = listaReceta;
+    }
+   
     
     
 }

@@ -1,21 +1,16 @@
 package modelo;
 
 import java.io.Serializable;
-import java.util.*;
 
-
-
-public class Receta implements Serializable{
+public class Receta implements Serializable {
 
     private int id; //El id es un numero único con el cual va a contar cada receta para su busqeuda en base de datos, este id se generara automaticamente
     private String nombre;
-    private ArrayList<String> ingredientes;
+    private String descripcion; 
+    private String ingredientes;
     private String preparacion;
-    private String clasificacion;
     private boolean favoritos = false;
-    private byte facilidad;  //Esta variable solo debe almacenar numeros del 1 - 10 
-    private byte cantidadDePersonas; //Esa variable solo debe almacenar numeros del 1 - 20;
-    private float tiempoDePreparacion;
+    private int cantidadDePersonas; //Esa variable solo debe almacenar numeros del 1 - 20;
     private boolean propia = false;
 
     //Este constructor esta diseñado para realizar comunicaciones con esta  clase y sus metodos
@@ -24,19 +19,24 @@ public class Receta implements Serializable{
     }
 
     //Este constructor esta diseñado para agregar, visualizar o editar una nueva receta
-    public Receta(String nombre, ArrayList<String> ingredientes, String preparacion, String clasificacion, boolean favoritos, byte facilidad, byte cantidadDePesonas, float tiempoDePreparacion, boolean propia) {
+    public Receta(String nombre, String ingredientes, String preparacion, boolean favoritos, int cantidadDePesonasI, boolean propia, String descripcionDeReceta) {
         this.nombre = nombre;
         this.ingredientes = ingredientes;
         this.preparacion = preparacion;
-        this.clasificacion = clasificacion;
         this.favoritos = favoritos;
-        this.facilidad = facilidad;
-        this.cantidadDePersonas = cantidadDePesonas;
-        this.tiempoDePreparacion = tiempoDePreparacion;
+        this.cantidadDePersonas = cantidadDePesonasI;
         this.propia = propia;
+        this.descripcion = descripcionDeReceta; 
 
     }
 
+    
+    public String toString(){
+        return "\n***"+"El nombre de la receta es: "+ nombre+ ", Los ingredientes de la receta son: "+ingredientes+
+                ", \nLa preparacion de la receta es: "+preparacion+", La descripcion de la receta es: "+descripcion+
+                ", \nLa receta es propia: "+propia+", Esta en favoritos: "+favoritos+", La cantidad de personas por racion: "+cantidadDePersonas+"***\n";
+    }
+    
     //Get Y Set permiten aceder y modificar los parametros de esta clase a excepción del id, el cual solo permite ver
     public int getId() {
         return id;
@@ -50,11 +50,11 @@ public class Receta implements Serializable{
         this.nombre = nombre;
     }
 
-    public ArrayList<String> getIngredientes() {
+    public String getIngredientes() {
         return ingredientes;
     }
 
-    public void setIngredientes(ArrayList<String> ingredientes) {
+    public void setIngredientes(String ingredientes) {
         this.ingredientes = ingredientes;
     }
 
@@ -66,14 +66,6 @@ public class Receta implements Serializable{
         this.preparacion = preparacion;
     }
 
-    public String getClasificacion() {
-        return clasificacion;
-    }
-
-    public void setClasificacion(String clasificacion) {
-        this.clasificacion = clasificacion;
-    }
-
     public boolean isFavoritos() {
         return favoritos;
     }
@@ -81,31 +73,7 @@ public class Receta implements Serializable{
     public void setFavoritos(boolean favoritos) {
         this.favoritos = favoritos;
     }
-
-    public byte getFacilidad() {
-        return facilidad;
-    }
-
-    public void setFacilidad(byte facilidad) {
-        this.facilidad = facilidad;
-    }
-
-    public byte getCantidadDePersonas() {
-        return cantidadDePersonas;
-    }
-
-    public void setCantidadDePersonas(byte cantidadDePersonas) {
-        this.cantidadDePersonas = cantidadDePersonas;
-    }
-
-    public float getTiempoDePreparacion() {
-        return tiempoDePreparacion;
-    }
-
-    public void setTiempoDePreparacion(float tiempoDePreparacion) {
-        this.tiempoDePreparacion = tiempoDePreparacion;
-    }
-
+ 
     public boolean isPropia() {
         return propia;
     }
