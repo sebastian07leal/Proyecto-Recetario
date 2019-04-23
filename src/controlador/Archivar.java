@@ -112,15 +112,13 @@ public class Archivar {
     }
     
     //En caso de que el archivo exista solo se sobre escribira
-    //Este metodo tambien funciona para editar recetas
+    //Este metodo tambien funciona para editar recetas y eliminar recetas
     public boolean sobreEscribirReceta(String nombreUsuario, ArrayList<Receta> listadoRecetas){
         traerRcetas(nombreUsuario); //Para poder editar o agrgar una receta es necesario traerla
         boolean editado = false; 
-        this.recetasDeUsuaros = listadoRecetas; 
-        
+        this.recetasDeUsuaros = listadoRecetas;
         try {
             nuevo = new File(nombreUsuario+".txt");
-            
             envioDeDatos = new ObjectOutputStream(new FileOutputStream(nuevo)); 
             envioDeDatos.writeObject(this.recetasDeUsuaros);
             envioDeDatos.close();
@@ -129,8 +127,6 @@ public class Archivar {
             System.out.println("Error al remplazar el usuario");
             editado = false; 
         }
-        
-        
         return editado; 
     }
     

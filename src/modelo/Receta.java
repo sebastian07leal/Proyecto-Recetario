@@ -32,7 +32,7 @@ public class Receta implements Serializable {
 
     
     public String toString(){
-        return "\n***"+"El nombre de la receta es: "+ nombre+ ", Los ingredientes de la receta son: "+ingredientes+
+        return "\n***"+"El nombre de la receta es: '"+ nombre+ "', Los ingredientes de la receta son: "+ingredientes+
                 ", \nLa preparacion de la receta es: "+preparacion+", La descripcion de la receta es: "+descripcion+
                 ", \nLa receta es propia: "+propia+", Esta en favoritos: "+favoritos+", La cantidad de personas por racion: "+cantidadDePersonas+"***\n";
     }

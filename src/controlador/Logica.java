@@ -95,7 +95,7 @@ public class Logica {
         }
         return existe;
     }
-    
+
         //Este metodo devuelve el indice donde esta ubicado el usuario ingresado, se utiliza principalmente para comunicacion entre clases 
     public int  ubicacionDeUsuarioPorIndice (String nombreDeUsuario) {
         this.operadora = new Operadora();
@@ -240,10 +240,62 @@ public class Logica {
             respuestaMenu = true; 
         }else if(archivoCreado == true){
             respuestaMenu = true; 
+        }      
+        return  respuestaMenu; 
+    }
+    
+    
+    public boolean eliminarR(int indiceUsuario,String nombreReceta){
+        operadora = new Operadora(); 
+        Usuario nombreUser; 
+        boolean respuestaMenu = false; 
+        int indiceReseta; 
+        //Antes de poder traer las recetas del usuario, es necesario conocer el nombre del usuario
+        nombreUser = objetoUsuarioEnIndice(indiceUsuario); 
+        //Para poder editar la lista de recetas del usuario se traen el archivo correspondiente
+        operadora.getArchivar().traerRcetas(nombreUser.getNombre());
+        //Se verifica la existenncia y la ubicacion de la receta, mediante su nombre
+        indiceReseta = buscarReceta(indiceUsuario, nombreReceta); 
+        if(indiceReseta != -1){
+           //Se trae el arrayList que contiene las  recetas 
+            listaRecetas = operadora.getArchivar().getRecetasDeUsuario();
+            this.listaRecetas.remove(indiceReseta);
+            //Despues de eliminar es necesario guardar los cambios hechos en la lista
+            respuestaMenu = operadora.getArchivar().sobreEscribirReceta(nombreUser.getNombre(), this.listaRecetas);
+        }else{
+            System.out.println("No se encontro el nombre de la receta");
+            respuestaMenu = false;
         }
         
+//        System.out.println(nombreUser.getNombre());
+//        System.out.println(operadora.getArchivar().getRecetasDeUsuario());
         
-        return  respuestaMenu; 
+        
+        return respuestaMenu; 
+    }
+    
+    //Este metodo busca la receta por su nombre y devuelve la posicion en la que este, si no existe devuelve -1 como resultado
+    public int buscarReceta(int indiceUsuario, String nombreReceta){
+        operadora = new Operadora();
+         int posicionR = -1; 
+        Usuario nombreUsuario; 
+        //Se trae el nombre del usuario
+        nombreUsuario = objetoUsuarioEnIndice(indiceUsuario); 
+        //Se trae la lista de recetas 
+        operadora.getArchivar().traerRcetas(nombreUsuario.getNombre());
+        listaRecetas = operadora.getArchivar().getRecetasDeUsuario(); 
+        
+        //Recorre todos los obgetos del ArrayList
+        for (int i = 0; i < listaRecetas.size(); i++) {
+            if (listaRecetas.get(i).getNombre().equals(nombreReceta)) {
+                System.out.println("Entro");
+                posicionR = i;  //Envia cual es la poscion del usuario encontrado
+                break; //Este break es necesario para que el ciclo deje de iterar apenas encuentre un indice con el nombre de la receta
+            }else{
+                posicionR = -1; 
+            }
+        }
+        return posicionR;
     }
 
     //Get y Set de las variables basicas 

@@ -14,7 +14,12 @@ public class Principal {
          operadora.getMenu().initPage();
 
          
-       //test.mostrarRecetas("Sebastian");
+         //operadora.getLogica().eliminarR(1, "funciono");
+         
+         //operadora.getLogica().buscarReceta(1, "arroz"); 
+         
+         
+     test.mostrarRecetas("Sebastian");
 
     }
 

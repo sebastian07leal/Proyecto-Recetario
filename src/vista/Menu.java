@@ -153,7 +153,8 @@ public class Menu {
             System.out.println("3. Para ver todas las recetas");
             System.out.println("4. Para ver recetas favoritas");
             System.out.println("5. Configuracion de cuenta");
-            System.out.println("6. Cerrar sesion");
+            System.out.println("6. Para eliminar una receta");
+            System.out.println("7. Cerrar sesion");
 
             try {
                 switch (sc.nextInt()) {
@@ -175,7 +176,10 @@ public class Menu {
                         menuEditarPerfil(datosDeUsuario.getNombre()); //Enviar usuario
                         break;
                     case 6:
-                        exit = -1; //Slago del ciclo
+                        eliminarReceta(indiceUsuario); 
+                        break;
+                    case 7:
+                        exit = -1; 
                         break;
                     default:
                         System.out.println("Opcion no permitida\nIntentalo de nuevo\n");
@@ -353,6 +357,39 @@ public class Menu {
             System.out.println("No se creo la receta");
         }
 
+    }
+    
+    
+    //Este menu toma los datos sobre que receta se va a borrar de la lista
+    public void eliminarReceta(int indiceUsuario){
+        operadora = new Operadora(); 
+        sc = new Scanner(System.in);
+        String  nombreEliminar; 
+        String confirmacion; 
+        System.out.println("Acontinuacion ingrese el nombre de la receta a eliminar");
+        nombreEliminar = sc.nextLine(); 
+        System.out.println("Si esta seguro que desea eliminar porfavor escribar el siguiente texto: 'ELIMINAR' ");
+        confirmacion = sc.nextLine(); 
+        //Se verifica que la confirmacion se dada
+        if (confirmacion.equals("ELIMINAR")) {
+            //Se llama el metodo de eliminacion de variable
+            if(operadora.getLogica().eliminarR(indiceUsuario, nombreEliminar)){
+                System.out.println("La receta ha sido eliminada con exito");
+                generarMenu(indiceUsuario);
+            }else{
+                System.out.println("Hubo un error al eliminar la receta, intentelo de nuevo");
+                eliminarReceta(indiceUsuario);
+            }
+            
+        }else{ 
+            System.out.println("La palabra escrita no coinside. Si quiere reintentar escriba 'si' de lo contrario oprima otra tecla");
+            confirmacion = sc.nextLine(); 
+            if(confirmacion.equals("si")){
+                eliminarReceta(indiceUsuario);
+            }else{
+                generarMenu(indiceUsuario);
+            }
+        }    
     }
 
     //Get y Set permiten ver las contraseñas ingresadas por el usuario pero no cambiarlas
