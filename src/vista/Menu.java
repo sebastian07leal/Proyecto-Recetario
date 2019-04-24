@@ -32,9 +32,9 @@ public class Menu {
             System.out.println("2. Registrarse");
             System.out.println("3. ¿Has olvidado tu contraseña?");
             System.out.println("4. Salir");
-            respuestaDeUsuaario = sc.nextInt();
 
             try {
+                respuestaDeUsuaario = sc.nextInt();
                 switch (respuestaDeUsuaario) {
                     case 1:
                         exit = -1;
@@ -68,12 +68,12 @@ public class Menu {
 
     //Este metodo simula la interfaz de usuario (Iniciar Sesion) 
     public void iniciarSecion() {
-
         this.operadora = new Operadora();
         sc = new Scanner(System.in);
         byte exit = -1;
 
         do {
+
             System.out.println("*Acontinuacion ingrese su usuario y contraseña\n");
             System.out.println("Usuario\n");
             this.nombreIngresado = sc.nextLine();
@@ -85,11 +85,13 @@ public class Menu {
             if (sc.nextLine().equals("si")) {
                 exit = -1;
                 initPage();
+            } else {
+                //Se envia la informacion a logica para que valide si el usuario es correcto o no 
+                operadora.getLogica().validarInicoDeSesion(this.nombreIngresado, this.contrasenaIngresada);
             }
-            //Se envia la informacion a logica para que valide si el usuario es correcto o no 
-            operadora.getLogica().validarInicoDeSesion(this.nombreIngresado, this.contrasenaIngresada);
 
         } while (exit == 0);
+
     }
 
     public void crearUsuario() {
@@ -138,6 +140,28 @@ public class Menu {
         } while (exit == 0);
     }
 
+    public void eliminarUsuario(int indiceUsuario) {
+        operadora = new Operadora();
+        sc = new Scanner(System.in);
+        String contrasenaEnviada;
+        String respuesta;
+        System.out.println("Antes de eliminar el usuario es necesario informarte que no se prodra recuperar posteriormente las recetas creadas");
+        System.out.println("Si quieres eliminar es usuario porfavor ingresa tu contraseña a continuacion");
+        contrasenaEnviada = sc.nextLine();
+        if (operadora.getLogica().eliminarUsuario(indiceUsuario, contrasenaEnviada)) {
+            System.out.println("El se a eliminado cone exito");
+            initPage();
+        } else {
+            System.out.println("¿Desea intentarlo de nuevo? escriba 'si'  de lo contrario oprima otra palabra");
+            respuesta = sc.nextLine();
+            if (respuesta.equals("si")) {
+                eliminarReceta(indiceUsuario);
+            } else {
+                generarMenu(indiceUsuario);
+            }
+        }
+    }
+
     //Este metodo simula la interfaz de usuario desde el menu (Home)
     public void generarMenu(int indiceUsuario) {
         operadora = new Operadora();
@@ -163,27 +187,27 @@ public class Menu {
                         menuAgregarReceta(indiceUsuario);
                         break;
                     case 2:
-                        exit = -1; 
-                        verRecetas(indiceUsuario, "propia"); 
+                        exit = -1;
+                        verRecetas(indiceUsuario, "propia");
                         break;
                     case 3:
-                        exit = -1; 
-                        verRecetas(indiceUsuario, "global"); 
+                        exit = -1;
+                        verRecetas(indiceUsuario, "global");
                         break;
                     case 4:
-                        exit = -1; 
-                        buscarReceta(indiceUsuario); 
+                        exit = -1;
+                        buscarReceta(indiceUsuario);
                         break;
                     case 5:
                         exit = -1;
                         menuEditarPerfil(datosDeUsuario.getNombre()); //Enviar usuario
                         break;
                     case 6:
-                        exit = -1; 
-                        eliminarReceta(indiceUsuario); 
+                        exit = -1;
+                        eliminarReceta(indiceUsuario);
                         break;
                     case 7:
-                        exit = -1; 
+                        exit = -1;
                         break;
                     default:
                         System.out.println("Opcion no permitida\nIntentalo de nuevo\n");
@@ -225,6 +249,7 @@ public class Menu {
     public void menuEditarPerfil(String usuarioIngresado) {
         this.operadora = new Operadora();
         operadora.getArchivar().traerListadoDeUsuarios();
+        int indiseUsuario = operadora.getLogica().ubicacionDeUsuarioPorIndice(usuarioIngresado);
         String nueva = "";
         String nuevaConfirmacion;
         String contrasenaDeConfirmacion;
@@ -261,7 +286,7 @@ public class Menu {
                         System.out.println("Antes de continuar se debe destacar que despues de eliminar esta cuenta, se eliminaran todas las recetas agregadas y los datos asiganados");
                         System.out.println("Para confirmar porfavor ingrese su contraseña para hacer efectiva la eliminacion");
                         contrasenaDeConfirmacion = sc.nextLine();
-                        //Se debe confirmar la contraseña y lugo de eso llamar al metodo eliminar
+                        eliminarUsuario(indiseUsuario);
                         break;
                     case 4:
                         exit = -1;
@@ -312,10 +337,10 @@ public class Menu {
             if (confirmacion.equals("si")) {
                 //Valida datos
                 //Valida que todos los datos hayan sido ingresados
-                if(operadora.getLogica().buscarReceta(indiceUsuario, nombreReceta) != (-1)){
+                if (operadora.getLogica().buscarReceta(indiceUsuario, nombreReceta) != (-1)) {
                     System.out.println("El nombre de la receta ingresado ya existe, porfavor intente con otro nombre\n");
                     menuAgregarReceta(indiceUsuario);
-                }else if (cantidadDePersonas >= 100) {
+                } else if (cantidadDePersonas >= 100) {
                     System.out.println("El numero agregado supera el permitido, intentelo de nuevo\n");
                     menuAgregarReceta(indiceUsuario);
                 } else if (nombreReceta.length() < 2) {
@@ -360,121 +385,116 @@ public class Menu {
         if (respuestaLogica == true) {
             System.out.println("LA RECETAS SE A AGREGADO CON EXITO\n");
             generarMenu(indiceUsuario);
-        } else{
+        } else {
             System.out.println("No se creo la receta");
         }
 
     }
-    
-    
+
     //Este menu toma los datos sobre que receta se va a borrar de la lista
-    public void eliminarReceta(int indiceUsuario){
-        operadora = new Operadora(); 
+    public void eliminarReceta(int indiceUsuario) {
+        operadora = new Operadora();
         sc = new Scanner(System.in);
-        String  nombreEliminar; 
-        String confirmacion; 
+        String nombreEliminar;
+        String confirmacion;
         System.out.println("Acontinuacion ingrese el nombre de la receta a eliminar");
-        nombreEliminar = sc.nextLine(); 
+        nombreEliminar = sc.nextLine();
         System.out.println("Si esta seguro que desea eliminar porfavor escribar el siguiente texto: 'ELIMINAR' ");
-        confirmacion = sc.nextLine(); 
+        confirmacion = sc.nextLine();
         //Se verifica que la confirmacion se dada
         if (confirmacion.equals("ELIMINAR")) {
             //Se llama el metodo de eliminacion de variable
-            if(operadora.getLogica().eliminarR(indiceUsuario, nombreEliminar)){
+            if (operadora.getLogica().eliminarR(indiceUsuario, nombreEliminar)) {
                 System.out.println("La receta ha sido eliminada con exito");
                 generarMenu(indiceUsuario);
-            }else{
+            } else {
                 System.out.println("Hubo un error al eliminar la receta, intentelo de nuevo");
                 eliminarReceta(indiceUsuario);
             }
-            
-        }else{ 
+
+        } else {
             System.out.println("La palabra escrita no coinside. Si quiere reintentar escriba 'si' de lo contrario oprima otra tecla");
-            confirmacion = sc.nextLine(); 
-            if(confirmacion.equals("si")){
+            confirmacion = sc.nextLine();
+            if (confirmacion.equals("si")) {
                 eliminarReceta(indiceUsuario);
-            }else{
+            } else {
                 generarMenu(indiceUsuario);
             }
-        }    
+        }
     }
-    
-    public void verRecetas(int indiceUsuario,String vista){
-        operadora = new Operadora(); 
-        sc = new Scanner(System.in); 
+
+    public void verRecetas(int indiceUsuario, String vista) {
+        operadora = new Operadora();
+        sc = new Scanner(System.in);
         String respuesta = "";
         System.out.println("Bienvenido estas las recetas\n");
-        operadora.getLogica().verRecetas(indiceUsuario,vista);
+        operadora.getLogica().verRecetas(indiceUsuario, vista);
         //Este enunciado se debe cambuar en las interfaces graficas por un boton cancelar
         System.out.println("si quiere volver al menu principal escriba 'si' de lo contrario oprima otra tecla");
-        respuesta = sc.nextLine(); 
-        
+        respuesta = sc.nextLine();
+
         //Se valida la respuesta, esto se encarga de permitirle al suario volver al menu cuando quiera
-        if(respuesta.equals("si")){
+        if (respuesta.equals("si")) {
             generarMenu(indiceUsuario);
-        }else{
+        } else {
             verRecetas(indiceUsuario, vista);
         }
-        
+
     }
-    
-    
-    public void editarReceta(int indiseUsuario){
-        operadora = new Operadora(); 
-        sc  = new Scanner(System.in); 
-        String confirmacion; 
-        String receta; 
+
+    public void editarReceta(int indiseUsuario) {
+        operadora = new Operadora();
+        sc = new Scanner(System.in);
+        String confirmacion;
+        String receta;
         System.out.println("Bienvenido a su editor de recetas");
         System.out.println("Porfavor ingrese el nombre de la receta que quiere editar");
-        receta = sc.nextLine(); 
+        receta = sc.nextLine();
         System.out.println("¿Esta seguro que desea realizar el cambio?, escriba 'si' en el caso de estar de acuerdo");
-        confirmacion = sc.nextLine(); 
-        if(confirmacion.equals("si")){
+        confirmacion = sc.nextLine();
+        if (confirmacion.equals("si")) {
             System.out.println("Este metodo todavia no funciona intenta hacer otra cosa");
             generarMenu(indiseUsuario);
-        }else{
+        } else {
             System.out.println("Si quiere volver a intentarlo escriba 'si' de lo contrario oprima otra tecla");
             confirmacion = sc.nextLine();
-            if(confirmacion.equals("si")){
+            if (confirmacion.equals("si")) {
                 editarReceta(indiseUsuario);    //Se reitera el ciclo para que el usuario pueda intentarlo de nuevo
-            }else{
+            } else {
                 generarMenu(indiseUsuario); //Se envia al meni principal
             }
         }
     }
-    
-    
-    public void buscarReceta(int indiseUsuario){
-        operadora = new Operadora(); 
-        sc = new Scanner(System.in); 
+
+    public void buscarReceta(int indiseUsuario) {
+        operadora = new Operadora();
+        sc = new Scanner(System.in);
         String nombreBuscar;
-        String respuesta; 
-        int posicion = -2; 
+        String respuesta;
+        int posicion = -2;
         System.out.println("Ingrese el nombre  exacto de la receta a buscar");
-        nombreBuscar = sc.nextLine(); 
-        posicion = operadora.getLogica().buscarReceta(indiseUsuario, nombreBuscar); 
+        nombreBuscar = sc.nextLine();
+        posicion = operadora.getLogica().buscarReceta(indiseUsuario, nombreBuscar);
         //Se busca la receta
         if (posicion != -1) {
             operadora.getLogica().verResultadoBusqueda(indiseUsuario, posicion);
             System.out.println("Si quiere volver a intentarlo escriba 'si' de lo contrario oprima otra tecla");
-            respuesta = sc.nextLine(); 
+            respuesta = sc.nextLine();
             if (respuesta.equals("si")) {
                 buscarReceta(indiseUsuario);
-            }else{
+            } else {
                 generarMenu(indiseUsuario);
             }
-        }else{
-            System.out.println("Lo sentimos el nombre "+nombreBuscar+" no existe, si quiere intentarlo de nuevo escriba 'si' de lo contrario oprima otra tecla");
-            respuesta = sc.nextLine(); 
-            if(respuesta.equals("si")){
+        } else {
+            System.out.println("Lo sentimos el nombre " + nombreBuscar + " no existe, si quiere intentarlo de nuevo escriba 'si' de lo contrario oprima otra tecla");
+            respuesta = sc.nextLine();
+            if (respuesta.equals("si")) {
                 buscarReceta(indiseUsuario);
-            }else{
+            } else {
                 generarMenu(indiseUsuario);
             }
         }
-        
-        
-        
+
     }
 
     //Get y Set permiten ver las contraseñas ingresadas por el usuario pero no cambiarlas

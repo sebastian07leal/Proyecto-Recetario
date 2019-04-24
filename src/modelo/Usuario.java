@@ -3,34 +3,34 @@ package modelo;
 import java.io.Serializable;
 import java.util.UUID;  //Esta libreria es necesaria para generar el id 
 
-public class Usuario implements Serializable{
+public class Usuario implements Serializable {
 
     private UUID id; //El id se generara automaticamente Segun el estandar RFC4122
     private String nombre;
-    private String contrasena; 
-    private String palabraDeRecuperaion; 
-    
+    private String contrasena;
+    private String palabraDeRecuperaion;
+
     //Constructor para comunicar 
-    public Usuario(){
+    public Usuario() {
     }
-    
+
     //Constructor para agregar un nuevo usuario
-    public Usuario(String nombre, String contrasena, String recuperacion){      
-        this.nombre = nombre; 
-        this.contrasena = contrasena; 
-        this.palabraDeRecuperaion = recuperacion; 
-        this.id = generarID();        
+    public Usuario(String nombre, String contrasena, String recuperacion) {
+        this.nombre = nombre;
+        this.contrasena = contrasena;
+        this.palabraDeRecuperaion = recuperacion;
+        this.id = generarID();
     }
-    
+
     //Este metodo genera el ID segun el estandar UUID
-    public UUID generarID(){   
+    public UUID generarID() {
         UUID idusuario = UUID.randomUUID();
         return idusuario;
     }
-    
+
     //Es necesario para visualizar de forma correcta lo creado en este obgeto
-    public String toString(){
-        return "\n***"+" El Id del usuario es: "+ id +", Nombre: " + nombre + ", Contraseña: " + contrasena + ", Palabra de recuperacion:" + palabraDeRecuperaion+"***";
+    public String toString() {
+        return "\n***" + " El Id del usuario es: " + id + ", Nombre: '" + nombre + "', Contraseña: '" + contrasena + "', Palabra de recuperacion:" + palabraDeRecuperaion + "***";
     }
 
 //Get y Set 
@@ -61,8 +61,5 @@ public class Usuario implements Serializable{
     public void setPalabraDeRecuperacion(String preguntaRecuperacion) {
         this.palabraDeRecuperaion = preguntaRecuperacion;
     }
-    
-    
-    
-    
+
 }

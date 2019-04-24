@@ -8,11 +8,10 @@ import vista.*;
 public class SuperTest {
 
     private Operadora operadora = new Operadora();
-    
-    public SuperTest(){
-        
+
+    public SuperTest() {
+
     }
-    
 
     public void mostrarColeccionDeUsuarios() {
 
@@ -20,13 +19,11 @@ public class SuperTest {
         System.out.println(operadora.getArchivar().getListaDeUsuarios());
         System.out.println();
     }
-    
-    public void mostrarRecetas(String nombre ){
-        
+
+    public void mostrarRecetas(String nombre) {
+
         operadora.getArchivar().traerRcetas(nombre);
         System.out.println(operadora.getArchivar().getRecetasDeUsuario());
     }
-    
-    
 
 }

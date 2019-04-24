@@ -6,7 +6,7 @@ public class Receta implements Serializable {
 
     private int id; //El id es un numero único con el cual va a contar cada receta para su busqeuda en base de datos, este id se generara automaticamente
     private String nombre;
-    private String descripcion; 
+    private String descripcion;
     private String ingredientes;
     private String preparacion;
     private boolean favoritos = false;
@@ -26,21 +26,20 @@ public class Receta implements Serializable {
         this.favoritos = favoritos;
         this.cantidadDePersonas = cantidadDePesonasI;
         this.propia = propia;
-        this.descripcion = descripcionDeReceta; 
+        this.descripcion = descripcionDeReceta;
 
     }
 
-    
-    public String toString(){
-        return "\n***"+"El nombre de la receta es: '"+ nombre+ 
-                "', \nLos ingredientes de la receta son: '"+ingredientes+
-                "', \nLa preparacion de la receta es: '"+preparacion+
-                "',\nLa descripcion de la receta es: '"+descripcion+
-                "', \nLa receta es propia: '"+propia+
-                "',\nEsta en favoritos: '"+favoritos+
-                "',\nLa cantidad de personas por racion: "+cantidadDePersonas+"***\n";
+    public String toString() {
+        return "\n***" + "El nombre de la receta es: '" + nombre
+                + "', \nLos ingredientes de la receta son: '" + ingredientes
+                + "', \nLa preparacion de la receta es: '" + preparacion
+                + "',\nLa descripcion de la receta es: '" + descripcion
+                + "', \nLa receta es propia: '" + propia
+                + "',\nEsta en favoritos: '" + favoritos
+                + "',\nLa cantidad de personas por racion: " + cantidadDePersonas + "***\n";
     }
-    
+
     //Get Y Set permiten aceder y modificar los parametros de esta clase a excepción del id, el cual solo permite ver
     public int getId() {
         return id;
@@ -77,7 +76,7 @@ public class Receta implements Serializable {
     public void setFavoritos(boolean favoritos) {
         this.favoritos = favoritos;
     }
- 
+
     public boolean isPropia() {
         return propia;
     }

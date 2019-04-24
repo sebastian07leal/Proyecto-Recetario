@@ -20,8 +20,6 @@ public class Operadora {
         this.logica = new Logica();
         this.usuario = new Usuario();
         this.archivar = new Archivar();
-        
-       
 
     }
 
@@ -32,17 +30,17 @@ public class Operadora {
     public Menu getMenu() {
         return menu;
     }
-    
-    public Logica getLogica(){
+
+    public Logica getLogica() {
         return logica;
     }
-    
-    public Usuario getUsuario(){
+
+    public Usuario getUsuario() {
         return usuario;
     }
-    
-    public  Archivar getArchivar(){
-        return archivar; 
+
+    public Archivar getArchivar() {
+        return archivar;
     }
 
     Object getArchivar(Usuario usuario) {
