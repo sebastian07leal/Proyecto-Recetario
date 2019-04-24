@@ -13,13 +13,23 @@ public class Principal {
          //Inico del programa
          operadora.getMenu().initPage();
 
-         
+         //Test de eliminar receta 
          //operadora.getLogica().eliminarR(1, "funciono");
          
-         //operadora.getLogica().buscarReceta(1, "arroz"); 
+         //Ver recetas propias
+         //operadora.getMenu().verRecetasPropias(1);
          
+         //Metodo ver recetas LOGICA
+         //operadora.getLogica().verRecetas(1, "global");
          
-     test.mostrarRecetas("Sebastian");
+         //Ver recetas por usuario
+         test.mostrarRecetas("Sebastian");
+         
+         //Ver datos de usuario
+         //test.mostrarColeccionDeUsuarios();
+         
+         //test a buscar
+         //operadora.getLogica().verResultadoBusqueda(1, 1);
 
     }
 

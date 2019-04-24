@@ -18,6 +18,7 @@ public class Logica {
     private Receta receta; 
     private ArrayList<Usuario> listaMomentanea;
     private ArrayList<Receta> listaRecetas; 
+    private AbstractList<Receta> listaRecetaAdmin; 
 
     public Logica() {
     }
@@ -77,7 +78,7 @@ public class Logica {
         //Se envia el obgeto para guardarlo con persistencia     
         return usuarioCreado;
     }
-
+    
     //Este metodo busca nombres de usuarios dentro de el archivo de usuarios retorna flaso/verdadero si el usuario existe
     public boolean buscarUsuario(String nombreDeUsuario) {
         boolean existe = false;
@@ -219,10 +220,8 @@ public class Logica {
         boolean existeArchivo = false; 
         boolean archivoCreado = false; 
         String nombreUsuario;
-        UUID idDeUsuario;
         //Se trae al obgeto y se trae el indice del usuario
         this.usuario = objetoUsuarioEnIndice(indiceDeUsuario); //Se guardan todos los datos del usuario
-        idDeUsuario = usuario.getId(); //Se guarda el id del usuario para su manejo en la clase archivar 
         nombreUsuario = usuario.getNombre(); 
        this.receta = new Receta(nombreR, ingredientesR, preparacionR, false,  cantidadR, true, descripcionR);
        /*Llama el metodo que se encarga de verificar si el archivo existe y si no crearlo*/
@@ -288,7 +287,6 @@ public class Logica {
         //Recorre todos los obgetos del ArrayList
         for (int i = 0; i < listaRecetas.size(); i++) {
             if (listaRecetas.get(i).getNombre().equals(nombreReceta)) {
-                System.out.println("Entro");
                 posicionR = i;  //Envia cual es la poscion del usuario encontrado
                 break; //Este break es necesario para que el ciclo deje de iterar apenas encuentre un indice con el nombre de la receta
             }else{
@@ -297,6 +295,48 @@ public class Logica {
         }
         return posicionR;
     }
+    
+    public void verRecetas(int indiceUsuario,String mostrar){
+     //Este metodo recibe dos parametros, el primero es el indice del usuario y el segundo determina que se debe mostrar
+    //propia  = solo las recetas del usuario
+    //global = las recetas propias y las de Admin
+        operadora = new Operadora(); 
+        this.usuario =objetoUsuarioEnIndice(indiceUsuario);
+        
+        if(mostrar.equals("propia")){
+            //solo se muestran las recetas del usuario
+            operadora.getArchivar().traerRcetas(usuario.getNombre());
+            listaRecetas = operadora.getArchivar().getRecetasDeUsuario(); 
+            System.out.println(listaRecetas);   //Muestra las recetas del usuario
+        }else if (mostrar.equals("global")){
+            //Se muestran la recetas de Admin y del Usuario
+            operadora.getArchivar().traerRcetas(usuario.getNombre());
+            listaRecetas = operadora.getArchivar().getRecetasDeUsuario(); //Se guardan la recetas del usuario
+            operadora.getArchivar().traerRcetas("Admin"); //Se trae las recetas del usuario global
+            listaRecetaAdmin = operadora.getArchivar().getRecetasDeUsuario(); //Se guardan las recetas predefinidas para mostrarlas
+            System.out.println("PROPIAS: \n"+listaRecetas+" GLOBALES:\n "+listaRecetaAdmin);
+        }        
+    }
+    
+    public void verResultadoBusqueda(int indIseUsuario, int ubicacionReceta){
+        //Este metodo solo permite visualizar una receta 
+        operadora = new Operadora(); 
+        this.usuario = objetoUsuarioEnIndice(indIseUsuario);
+         //Se traen las recetas del usuario
+        operadora.getArchivar().traerRcetas(usuario.getNombre());
+        listaRecetas = operadora.getArchivar().getRecetasDeUsuario(); 
+        System.out.println("Esta es la receta encontrada"+ listaRecetas.get(ubicacionReceta) );
+        
+        
+    }
+    
+    //Este metodo se debe encargar de hacer las validaciones para enviar a menu agregar receta, donde se editara la receta
+    public void validarEdicion(int indiceUsuario, String recetaEditar){
+
+    }
+    
+    
+    
 
     //Get y Set de las variables basicas 
     public String getNombreRecibido() {

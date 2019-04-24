@@ -151,9 +151,9 @@ public class Menu {
             System.out.println("1. Para añadir una receta");
             System.out.println("2. Para ver mis recetas");
             System.out.println("3. Para ver todas las recetas");
-            System.out.println("4. Para ver recetas favoritas");
+            System.out.println("4. Buscar receta");
             System.out.println("5. Configuracion de cuenta");
-            System.out.println("6. Para eliminar una receta");
+            System.out.println("6. Eliminar  receta");
             System.out.println("7. Cerrar sesion");
 
             try {
@@ -163,19 +163,23 @@ public class Menu {
                         menuAgregarReceta(indiceUsuario);
                         break;
                     case 2:
-                        System.out.println("Estoy viendo mis recetas");
+                        exit = -1; 
+                        verRecetas(indiceUsuario, "propia"); 
                         break;
                     case 3:
-                        System.out.println("Estoy viendo todas las recetas");
+                        exit = -1; 
+                        verRecetas(indiceUsuario, "global"); 
                         break;
                     case 4:
-                        System.out.println("Estoy viendo recetas favoritas");
+                        exit = -1; 
+                        buscarReceta(indiceUsuario); 
                         break;
                     case 5:
                         exit = -1;
                         menuEditarPerfil(datosDeUsuario.getNombre()); //Enviar usuario
                         break;
                     case 6:
+                        exit = -1; 
                         eliminarReceta(indiceUsuario); 
                         break;
                     case 7:
@@ -308,7 +312,10 @@ public class Menu {
             if (confirmacion.equals("si")) {
                 //Valida datos
                 //Valida que todos los datos hayan sido ingresados
-                if (cantidadDePersonas >= 100) {
+                if(operadora.getLogica().buscarReceta(indiceUsuario, nombreReceta) != (-1)){
+                    System.out.println("El nombre de la receta ingresado ya existe, porfavor intente con otro nombre\n");
+                    menuAgregarReceta(indiceUsuario);
+                }else if (cantidadDePersonas >= 100) {
                     System.out.println("El numero agregado supera el permitido, intentelo de nuevo\n");
                     menuAgregarReceta(indiceUsuario);
                 } else if (nombreReceta.length() < 2) {
@@ -390,6 +397,84 @@ public class Menu {
                 generarMenu(indiceUsuario);
             }
         }    
+    }
+    
+    public void verRecetas(int indiceUsuario,String vista){
+        operadora = new Operadora(); 
+        sc = new Scanner(System.in); 
+        String respuesta = "";
+        System.out.println("Bienvenido estas las recetas\n");
+        operadora.getLogica().verRecetas(indiceUsuario,vista);
+        //Este enunciado se debe cambuar en las interfaces graficas por un boton cancelar
+        System.out.println("si quiere volver al menu principal escriba 'si' de lo contrario oprima otra tecla");
+        respuesta = sc.nextLine(); 
+        
+        //Se valida la respuesta, esto se encarga de permitirle al suario volver al menu cuando quiera
+        if(respuesta.equals("si")){
+            generarMenu(indiceUsuario);
+        }else{
+            verRecetas(indiceUsuario, vista);
+        }
+        
+    }
+    
+    
+    public void editarReceta(int indiseUsuario){
+        operadora = new Operadora(); 
+        sc  = new Scanner(System.in); 
+        String confirmacion; 
+        String receta; 
+        System.out.println("Bienvenido a su editor de recetas");
+        System.out.println("Porfavor ingrese el nombre de la receta que quiere editar");
+        receta = sc.nextLine(); 
+        System.out.println("¿Esta seguro que desea realizar el cambio?, escriba 'si' en el caso de estar de acuerdo");
+        confirmacion = sc.nextLine(); 
+        if(confirmacion.equals("si")){
+            System.out.println("Este metodo todavia no funciona intenta hacer otra cosa");
+            generarMenu(indiseUsuario);
+        }else{
+            System.out.println("Si quiere volver a intentarlo escriba 'si' de lo contrario oprima otra tecla");
+            confirmacion = sc.nextLine();
+            if(confirmacion.equals("si")){
+                editarReceta(indiseUsuario);    //Se reitera el ciclo para que el usuario pueda intentarlo de nuevo
+            }else{
+                generarMenu(indiseUsuario); //Se envia al meni principal
+            }
+        }
+    }
+    
+    
+    public void buscarReceta(int indiseUsuario){
+        operadora = new Operadora(); 
+        sc = new Scanner(System.in); 
+        String nombreBuscar;
+        String respuesta; 
+        int posicion = -2; 
+        System.out.println("Ingrese el nombre  exacto de la receta a buscar");
+        nombreBuscar = sc.nextLine(); 
+        posicion = operadora.getLogica().buscarReceta(indiseUsuario, nombreBuscar); 
+        //Se busca la receta
+        if (posicion != -1) {
+            operadora.getLogica().verResultadoBusqueda(indiseUsuario, posicion);
+            System.out.println("Si quiere volver a intentarlo escriba 'si' de lo contrario oprima otra tecla");
+            respuesta = sc.nextLine(); 
+            if (respuesta.equals("si")) {
+                buscarReceta(indiseUsuario);
+            }else{
+                generarMenu(indiseUsuario);
+            }
+        }else{
+            System.out.println("Lo sentimos el nombre "+nombreBuscar+" no existe, si quiere intentarlo de nuevo escriba 'si' de lo contrario oprima otra tecla");
+            respuesta = sc.nextLine(); 
+            if(respuesta.equals("si")){
+                buscarReceta(indiseUsuario);
+            }else{
+                generarMenu(indiseUsuario);
+            }
+        }
+        
+        
+        
     }
 
     //Get y Set permiten ver las contraseñas ingresadas por el usuario pero no cambiarlas
