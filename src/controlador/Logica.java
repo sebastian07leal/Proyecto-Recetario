@@ -189,7 +189,8 @@ public class Logica {
                 operadora.getMenu().menuEditarPerfil(nombreDeUsuario);
             }
         } else {
-            System.out.println("Entro******false*********");
+            System.out.println("No se encotro el usuario");
+            operadora.getMenu().menuEditarPerfil(nombreRecibido);
         }
         //Si se cumple con los requisitos para cambiar la contraseña, se prosede a realizar el cambiar 
         if (sePuedeCambiar == true) {
@@ -290,14 +291,26 @@ public class Logica {
     //Este metodo busca la receta por su nombre y devuelve la posicion en la que este, si no existe devuelve -1 como resultado
     public int buscarReceta(int indiceUsuario, String nombreReceta) {
         operadora = new Operadora();
+        operadora.getArchivar().traerRcetas("Admin");
+        listaRecetaAdmin = operadora.getArchivar().getRecetasDeUsuario();
         int posicionR = -1;
         Usuario nombreUsuario;
         //Se trae el nombre del usuario
         nombreUsuario = objetoUsuarioEnIndice(indiceUsuario);
         //Se trae la lista de recetas 
-        operadora.getArchivar().traerRcetas(nombreUsuario.getNombre());
+        operadora.getArchivar().traerRcetas(nombreUsuario.getNombre()); //Trae  las recetas
         listaRecetas = operadora.getArchivar().getRecetasDeUsuario();
 
+        //Busca dentro de la recetas globales
+        for (int j = 0; j < listaRecetaAdmin.size(); j++) {
+            if (listaRecetaAdmin.get(j).getNombre().equals(nombreReceta)) {
+                posicionR = j;  //Envia cual es la poscion del usuario encontrado
+                break; //Este break es necesario para que el ciclo deje de iterar apenas encuentre un indice con el nombre de la receta
+            } else {
+                posicionR = -1; 
+             }            
+        }        
+        
         //Recorre todos los obgetos del ArrayList
         for (int i = 0; i < listaRecetas.size(); i++) {
             if (listaRecetas.get(i).getNombre().equals(nombreReceta)) {
@@ -307,28 +320,33 @@ public class Logica {
                 posicionR = -1;
             }
         }
+
+        
         return posicionR;
     }
 
     public void verRecetas(int indiceUsuario, String mostrar) {
-     //Este metodo recibe dos parametros, el primero es el indice del usuario y el segundo determina que se debe mostrar
+        //Este metodo recibe dos parametros, el primero es el indice del usuario y el segundo determina que se debe mostrar
         //propia  = solo las recetas del usuario
         //global = las recetas propias y las de Admin
         operadora = new Operadora();
         this.usuario = objetoUsuarioEnIndice(indiceUsuario);
 
-        if (mostrar.equals("propia")) {
-            //solo se muestran las recetas del usuario
-            operadora.getArchivar().traerRcetas(usuario.getNombre());
-            listaRecetas = operadora.getArchivar().getRecetasDeUsuario();
-            System.out.println(listaRecetas);   //Muestra las recetas del usuario
-        } else if (mostrar.equals("global")) {
-            //Se muestran la recetas de Admin y del Usuario
-            operadora.getArchivar().traerRcetas(usuario.getNombre());
-            listaRecetas = operadora.getArchivar().getRecetasDeUsuario(); //Se guardan la recetas del usuario
-            operadora.getArchivar().traerRcetas("Admin"); //Se trae las recetas del usuario global
-            listaRecetaAdmin = operadora.getArchivar().getRecetasDeUsuario(); //Se guardan las recetas predefinidas para mostrarlas
-            System.out.println("PROPIAS: \n" + listaRecetas + " GLOBALES:\n " + listaRecetaAdmin);
+        switch (mostrar) {
+            case "propia":
+                //solo se muestran las recetas del usuario
+                operadora.getArchivar().traerRcetas(usuario.getNombre());
+                listaRecetas = operadora.getArchivar().getRecetasDeUsuario();
+                System.out.println(listaRecetas);   //Muestra las recetas del usuario
+                break;
+            case "global":
+                //Se muestran la recetas de Admin y del Usuario
+                operadora.getArchivar().traerRcetas(usuario.getNombre());
+                listaRecetas = operadora.getArchivar().getRecetasDeUsuario(); //Se guardan la recetas del usuario
+                operadora.getArchivar().traerRcetas("Admin"); //Se trae las recetas del usuario global
+                listaRecetaAdmin = operadora.getArchivar().getRecetasDeUsuario(); //Se guardan las recetas predefinidas para mostrarlas
+                System.out.println("PROPIAS: \n" + listaRecetas + " GLOBALES:\n " + listaRecetaAdmin);
+                break;
         }
     }
 
@@ -344,8 +362,83 @@ public class Logica {
     }
 
     //Este metodo se debe encargar de hacer las validaciones para enviar a menu agregar receta, donde se editara la receta
-    public void validarEdicion(int indiceUsuario, String recetaEditar) {
+    public void editarReceta(int indiceUsuario, String nombreReceta, String[] listaDeEdiciones) {
+        boolean errorGuardar = false;
+        usuario = objetoUsuarioEnIndice(indiceUsuario); //Se trae el obgeto usuario
+        operadora.getArchivar().traerRcetas(usuario.getNombre()); //Se traenlas recetas del usuario para modificar
+        //Es necesario concoer el indice de la receta
+        int posicionReceta = buscarReceta(indiceUsuario, nombreReceta);
+        //Se guardaran los datos optenidos en del array
+        int racionEntero;
+        listaRecetas = (ArrayList<Receta>) operadora.getArchivar().getRecetasDeUsuario().clone();  //Se crea una copia de la lista de usuarios para modificar
+        //Valida que datos del array estan llenos para cambiarlos
+        for (int i = 0; i < listaDeEdiciones.length; i++) {
 
+            if (listaDeEdiciones[i] != null) {
+            //Posicion 0 Contiene el  nombre
+                //Posicion 1 Contiene la descripcion
+                //Posicion 2 Contiene los ingredientes
+                //Posicion 3 Contiene la preparacion
+                //Posicion 4 Contiene la racion en cadenas de texto             
+                switch (i) {
+                    case 0:
+                        listaRecetas.get(posicionReceta).setNombre(listaDeEdiciones[i]); //Envia por medio de un set los datos 
+                        break;
+                    case 1:
+                        listaRecetas.get(posicionReceta).setDescripcion(listaDeEdiciones[i]);
+                        break;
+                    case 2:
+                        listaRecetas.get(posicionReceta).setIngredientes(listaDeEdiciones[i]);
+                        break;
+                    case 3:
+                        listaRecetas.get(posicionReceta).setPreparacion(listaDeEdiciones[3]);
+                        break;
+                    case 4:
+                        racionEntero = validaRacion(listaDeEdiciones[4]);
+                        if (racionEntero != -1) {
+                            listaRecetas.get(posicionReceta).setCantidadDePersonas(racionEntero);
+                        } else {
+                            System.out.println("\tNo se ingreso un numero, intentelo de nuevo");
+                            operadora.getMenu().editarReceta(indiceUsuario);
+                        }
+                        break;
+                    default:
+                        System.out.println("No se debe disparar switch editar receta");
+                        break;
+                }
+                //System.out.println("bacia "+i);
+            } else {
+                //System.out.println("basia "+(i+1));
+            }
+
+        }
+        //Guarda la receta editada
+        errorGuardar = operadora.getArchivar().sobreEscribirReceta(usuario.getNombre(), this.listaRecetas);
+        if (errorGuardar == false) {
+            System.out.println("Se produjo un error al editar");
+        }
+
+    }
+
+    //Este metodo valida el String enviado es un entero valido
+    private int validaRacion(String racionEnviada) {
+        int respuesta = -1;
+
+        try {
+            //transforma el String en numero
+            int racionTransformada = Integer.parseInt(racionEnviada);
+            //Valida que el numero este dentro de los permitidos
+            if (racionTransformada <= 100) {
+                respuesta = racionTransformada;
+            } else {
+                respuesta = -1;
+            }
+        } catch (Exception e) {
+            //No se ingreso un numero
+            respuesta = -1;
+        }
+
+        return respuesta;
     }
 
     //Get y Set de las variables basicas 

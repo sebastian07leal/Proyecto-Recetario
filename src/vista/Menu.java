@@ -20,6 +20,7 @@ public class Menu {
     }
 
     //Esta panatalla se ejecutara de primeras
+    @SuppressWarnings("InfiniteRecursion")
     public void initPage() {
 
         sc = new Scanner(System.in);
@@ -60,7 +61,8 @@ public class Menu {
                 System.out.println("Lo siento solo se permite ingrezar numeros enteros");
                 initPage();
             } catch (Exception e) {
-                System.out.println("Al parecer hay un error");
+                System.out.println("Al parecer hay un error en init page ");
+                initPage();
             }
 
         } while (exit == 0);
@@ -163,6 +165,7 @@ public class Menu {
     }
 
     //Este metodo simula la interfaz de usuario desde el menu (Home)
+    @SuppressWarnings("InfiniteRecursion")
     public void generarMenu(int indiceUsuario) {
         operadora = new Operadora();
         sc = new Scanner(System.in);
@@ -172,13 +175,14 @@ public class Menu {
         do {
             System.out.println("\n");
             System.out.println("*Acontinuacion ingrese la accion que desea realizar \n");
-            System.out.println("1. Para añadir una receta");
-            System.out.println("2. Para ver mis recetas");
-            System.out.println("3. Para ver todas las recetas");
-            System.out.println("4. Buscar receta");
-            System.out.println("5. Configuracion de cuenta");
-            System.out.println("6. Eliminar  receta");
-            System.out.println("7. Cerrar sesion");
+            System.out.println("\t1. Para añadir una receta");
+            System.out.println("\t2. Para ver mis recetas");
+            System.out.println("\t3. Para ver todas las recetas");
+            System.out.println("\t4. Buscar receta");
+            System.out.println("\t5. Configuracion de cuenta");
+            System.out.println("\t6. Eliminar  receta");
+            System.out.println("\t7. Editar receta");
+            System.out.println("\t8. Cerrar sesion");
 
             try {
                 switch (sc.nextInt()) {
@@ -207,6 +211,10 @@ public class Menu {
                         eliminarReceta(indiceUsuario);
                         break;
                     case 7:
+                        exit = -1;
+                        editarReceta(indiceUsuario);
+                        break;
+                    case 8:
                         exit = -1;
                         break;
                     default:
@@ -246,6 +254,7 @@ public class Menu {
         }
     }
 
+    @SuppressWarnings("InfiniteRecursion")
     public void menuEditarPerfil(String usuarioIngresado) {
         this.operadora = new Operadora();
         operadora.getArchivar().traerListadoDeUsuarios();
@@ -306,6 +315,7 @@ public class Menu {
 
     }
 
+    @SuppressWarnings("InfiniteRecursion")
     public void menuAgregarReceta(int indiceUsuario) {
         operadora = new Operadora();
         sc = new Scanner(System.in);
@@ -334,44 +344,48 @@ public class Menu {
             System.out.println("Desea enviar estos datos escriba 'si' de lo contrario escriba 'no' ");
             confirmacion = sc.nextLine();
             //Valida respuesta, sirve para volver atras si es necesario
-            if (confirmacion.equals("si")) {
-                //Valida datos
-                //Valida que todos los datos hayan sido ingresados
-                if (operadora.getLogica().buscarReceta(indiceUsuario, nombreReceta) != (-1)) {
-                    System.out.println("El nombre de la receta ingresado ya existe, porfavor intente con otro nombre\n");
+            switch (confirmacion) {
+                case "si":
+                    //Valida datos
+                    //Valida que todos los datos hayan sido ingresados
+                    if (operadora.getLogica().buscarReceta(indiceUsuario, nombreReceta) != (-1)) {
+                        System.out.println("El nombre de la receta ingresado ya existe, porfavor intente con otro nombre\n");
+                        menuAgregarReceta(indiceUsuario);
+                    } else if (cantidadDePersonas >= 100) {
+                        System.out.println("El numero agregado supera el permitido, intentelo de nuevo\n");
+                        menuAgregarReceta(indiceUsuario);
+                    } else if (nombreReceta.length() < 2) {
+                        System.out.println("Porfavor  ingrese un nombre mas largo");
+                        menuAgregarReceta(indiceUsuario);
+                    } else if (ingredientes.length() < 2) {
+                        System.out.println("Porfavor ingrese los ingredintes mas largo");
+                        menuAgregarReceta(indiceUsuario);
+                    } else if (preparacion.length() < 2) {
+                        System.out.println("Porfavor ingrese la preparacion mas largo");
+                        menuAgregarReceta(indiceUsuario);
+                    } else if (descripcion.length() < 2) {
+                        System.out.println("Porfavor ingrese la descripcion mas largo");
+                        menuAgregarReceta(indiceUsuario);
+                    } else {
+                        //Envia los datos a logica para su validacion
+                        respuestaLogica = operadora.getLogica().validarNuevaReceta(indiceUsuario, nombreReceta, ingredientes, preparacion, descripcion, cantidadDePersonas);
+                    }
+                    break;
+                case "no":
+                    //Se le da opciones al usuario para navegar en la plataforma
+                    //Permite al usuario intentarlo de nuevo o volver al menu incial
+                    System.out.println("Si desea intentarlo de nuevo ingrese 'si' de lo contrario oprima otra tecla");
+                    confirmacion = sc.nextLine();
+                    if (confirmacion.equals("si")) {
+                        menuAgregarReceta(indiceUsuario);
+                    } else {
+                        generarMenu(indiceUsuario);
+                    }
+                    break;
+                default:
+                    System.out.println("Solo se permite respuesta de 'si' y 'no' ");
                     menuAgregarReceta(indiceUsuario);
-                } else if (cantidadDePersonas >= 100) {
-                    System.out.println("El numero agregado supera el permitido, intentelo de nuevo\n");
-                    menuAgregarReceta(indiceUsuario);
-                } else if (nombreReceta.length() < 2) {
-                    System.out.println("Porfavor  ingrese un nombre mas largo");
-                    menuAgregarReceta(indiceUsuario);
-                } else if (ingredientes.length() < 2) {
-                    System.out.println("Porfavor ingrese los ingredintes mas largo");
-                    menuAgregarReceta(indiceUsuario);
-                } else if (preparacion.length() < 2) {
-                    System.out.println("Porfavor ingrese la preparacion mas largo");
-                    menuAgregarReceta(indiceUsuario);
-                } else if (descripcion.length() < 2) {
-                    System.out.println("Porfavor ingrese la descripcion mas largo");
-                    menuAgregarReceta(indiceUsuario);
-                } else {
-                    //Envia los datos a logica para su validacion
-                    respuestaLogica = operadora.getLogica().validarNuevaReceta(indiceUsuario, nombreReceta, ingredientes, preparacion, descripcion, cantidadDePersonas);
-                }
-
-            } else if (confirmacion.equals("no")) { //Se le da opciones al usuario para navegar en la plataforma
-                //Permite al usuario intentarlo de nuevo o volver al menu incial
-                System.out.println("Si desea intentarlo de nuevo ingrese 'si' de lo contrario oprima otra tecla");
-                confirmacion = sc.nextLine();
-
-                if (confirmacion.equals("si")) {
-                    menuAgregarReceta(indiceUsuario);
-                } else {
-                    generarMenu(indiceUsuario);
-                }
-            } else {
-                System.out.println("Solo se permite respuesta de 'si' y 'no' ");
+                    break;
             }
 
         } catch (java.util.InputMismatchException e) {
@@ -442,28 +456,103 @@ public class Menu {
 
     }
 
+    @SuppressWarnings("InfiniteRecursion")
     public void editarReceta(int indiseUsuario) {
         operadora = new Operadora();
         sc = new Scanner(System.in);
-        String confirmacion;
-        String receta;
-        System.out.println("Bienvenido a su editor de recetas");
-        System.out.println("Porfavor ingrese el nombre de la receta que quiere editar");
-        receta = sc.nextLine();
-        System.out.println("¿Esta seguro que desea realizar el cambio?, escriba 'si' en el caso de estar de acuerdo");
-        confirmacion = sc.nextLine();
-        if (confirmacion.equals("si")) {
-            System.out.println("Este metodo todavia no funciona intenta hacer otra cosa");
-            generarMenu(indiseUsuario);
+        String[] opciones = new String[5];
+        int exit = -1;
+        int respuesta;
+        int racion;
+        String res; 
+        String nombreReceta;
+        String reintentar;
+
+        System.out.println("Bienvenido a su editor de recetas\n");
+        System.out.println("Porfavor ingesa el nombre de la receta que quieres editar");
+        nombreReceta = sc.nextLine();   //Este escaner genera un error 
+
+        //Valida que la receta exista antes de continuar
+        //En caso de no existir no permite iniciar con la edicion
+        if (operadora.getLogica().buscarReceta(indiseUsuario, nombreReceta) != -1) {
+
+            do {
+                sc.nextLine(); 
+                System.out.println("Acontinuacion selecione lo que desea editar\n");
+
+                System.out.println("\t1. Nombre");
+                System.out.println("\t2. Descripcion");
+                System.out.println("\t3. Ingredientes");
+                System.out.println("\t4. Preparación");
+                System.out.println("\t5. Cantidad de ración");
+                //System.out.println("\t6. Cancelar");
+
+                try {
+                    respuesta = sc.nextInt(); //Se captura la respuesta  del usuario
+
+                    switch (respuesta) {
+                        case 1:
+                            exit = 1; 
+                            System.out.println("Porfavor ingrese el nuevo nombre");
+                            opciones[0] = sc.next(); 
+                            break;
+                        case 2:
+                            System.out.println("Porfavor ingrese la nueva descripción");
+                            opciones[1] = sc.next();
+                            break;
+                        case 3:
+                            System.out.println("Porfavor ingrese los ingredientes");
+                            opciones[2] = sc.next();
+                            break;
+                        case 4:
+                            System.out.println("Porfavor ingrese la preparacion");
+                            opciones[3] = sc.next();
+                            break;
+                        case 5:
+                            System.out.println("Profavor ingese la cantidad de ración ");
+                            opciones[4] = sc.next();
+                            break;
+                        case 6:
+                            //Se debe sustituir
+                            break;
+                        default:
+                            System.out.println("Solo se permite ingrezar numeros, intentelo de nuevo");
+                            editarReceta(indiseUsuario);
+                            break;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error intentelo de nuevo");
+                    editarReceta(indiseUsuario);
+                }
+                //Emula un boton de enviar
+                System.out.println("¿Quiere enviar los datos? Si es el caso ingrese 'si' de lo cotnrario oprima otra tecla");
+                reintentar = sc.next();
+                if (reintentar.equals("si")) {
+                    exit = -1;
+                    operadora.getLogica().editarReceta(indiseUsuario, nombreReceta, opciones);
+                }
+                System.out.println("¿Quiere editar algo mas? Si es el caso ingrese 'si' de lo cotnrario oprima otra tecla");
+                reintentar = sc.next();
+                if (reintentar.equals("si")) {
+                    exit = 0;
+                } else {   //Envia al menu principal  
+                    exit = -1;
+                    generarMenu(indiseUsuario);
+                }
+
+            } while (exit == 0);
+
         } else {
-            System.out.println("Si quiere volver a intentarlo escriba 'si' de lo contrario oprima otra tecla");
-            confirmacion = sc.nextLine();
-            if (confirmacion.equals("si")) {
-                editarReceta(indiseUsuario);    //Se reitera el ciclo para que el usuario pueda intentarlo de nuevo
-            } else {
-                generarMenu(indiseUsuario); //Se envia al meni principal
+            System.out.println("La receta no existe porfavor intentelo de nuevo, Quiere volver al menu principal, escriba 'si' de lo contrario oprima otra tecla");
+            res = sc.next(); 
+            if (res.equals("si")) {
+                editarReceta(indiseUsuario);
+            }else{
+                generarMenu(indiseUsuario);
             }
+
         }
+
     }
 
     public void buscarReceta(int indiseUsuario) {
@@ -471,7 +560,7 @@ public class Menu {
         sc = new Scanner(System.in);
         String nombreBuscar;
         String respuesta;
-        int posicion = -2;
+        int posicion = -3;
         System.out.println("Ingrese el nombre  exacto de la receta a buscar");
         nombreBuscar = sc.nextLine();
         posicion = operadora.getLogica().buscarReceta(indiseUsuario, nombreBuscar);

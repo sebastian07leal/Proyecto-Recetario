@@ -2,7 +2,6 @@ package controlador;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.UUID;
 import modelo.*;
 
 public class Archivar {
@@ -36,7 +35,7 @@ public class Archivar {
             System.out.println("Revisa donde se esta almacenando el dato regresado java.lang.RuntimeException ");
             creado = false;
         } catch (Exception e) {
-            System.out.println("Entro a otro error ");
+            System.out.println("Entro a otro error en guardar usuario");
             creado = false;
         }
         return creado;
@@ -61,7 +60,7 @@ public class Archivar {
             System.out.println("Revisa donde se esta almacenando el dato regresado java.lang.RuntimeException ");
             creado = false;
         } catch (Exception e) {
-            System.out.println("Entro a otro error ");
+            System.out.println("Entro a otro error en guardar");
             creado = false;
         }
         return creado;
@@ -77,7 +76,7 @@ public class Archivar {
             traerDatos.close();
 
         } catch (Exception e) {
-            System.out.println("HAY UN ERROR ");
+            System.out.println("HAY UN ERROR en traer listado");
         }
     }
 
@@ -130,15 +129,17 @@ public class Archivar {
 
     //Se crea un metodo que trae las recetas de los usuarios
     public void traerRcetas(String nombreUsuario) {
-        nuevo = new File(nombreUsuario + ".txt");
-        try {
-            this.traerDatos = new ObjectInputStream(new FileInputStream(nuevo));
-            recetasDeUsuaros = (ArrayList<Receta>) traerDatos.readObject();
-            traerDatos.close();
+        this.nuevo = new File(nombreUsuario + ".txt");
 
+        try {
+            this.traerDatos = new ObjectInputStream(new FileInputStream(this.nuevo));
+            recetasDeUsuaros = (ArrayList<Receta>) this.traerDatos.readObject();
+            traerDatos.close();
         } catch (Exception e) {
-           //Aca debe avizar de otra manera
+            //Aca debe avizar de otra manera
+            System.out.println("Error en traer Recetas");
         }
+
     }
 
     //get de la lista de usuarios para  su manejo en otras clases 

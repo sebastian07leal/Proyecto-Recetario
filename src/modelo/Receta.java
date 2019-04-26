@@ -10,7 +10,7 @@ public class Receta implements Serializable {
     private String ingredientes;
     private String preparacion;
     private boolean favoritos = false;
-    private int cantidadDePersonas; //Esa variable solo debe almacenar numeros del 1 - 20;
+    private int cantidadDePersonas;
     private boolean propia = false;
 
     //Este constructor esta diseñado para realizar comunicaciones con esta  clase y sus metodos
@@ -30,13 +30,12 @@ public class Receta implements Serializable {
 
     }
 
+    @Override
     public String toString() {
         return "\n***" + "El nombre de la receta es: '" + nombre
                 + "', \nLos ingredientes de la receta son: '" + ingredientes
                 + "', \nLa preparacion de la receta es: '" + preparacion
                 + "',\nLa descripcion de la receta es: '" + descripcion
-                + "', \nLa receta es propia: '" + propia
-                + "',\nEsta en favoritos: '" + favoritos
                 + "',\nLa cantidad de personas por racion: " + cantidadDePersonas + "***\n";
     }
 
@@ -77,12 +76,28 @@ public class Receta implements Serializable {
         this.favoritos = favoritos;
     }
 
-    public boolean isPropia() {
+    public boolean getPropia() {
         return propia;
     }
 
     public void setPropia(boolean propia) {
         this.propia = propia;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public int getCantidadDePersonas() {
+        return cantidadDePersonas;
+    }
+
+    public void setCantidadDePersonas(int cantidadDePersonas) {
+        this.cantidadDePersonas = cantidadDePersonas;
     }
 
 }
