@@ -61,7 +61,7 @@ public class Menu {
                 System.out.println("Lo siento solo se permite ingrezar numeros enteros");
                 initPage();
             } catch (Exception e) {
-                System.out.println("Al parecer hay un error en init page ");
+                System.out.println("Al parecer hay un error en init page "+e);
                 initPage();
             }
 
@@ -471,13 +471,13 @@ public class Menu {
         System.out.println("Bienvenido a su editor de recetas\n");
         System.out.println("Porfavor ingesa el nombre de la receta que quieres editar");
         nombreReceta = sc.nextLine();   //Este escaner genera un error 
-
+        sc.nextLine(); 
         //Valida que la receta exista antes de continuar
         //En caso de no existir no permite iniciar con la edicion
         if (operadora.getLogica().buscarReceta(indiseUsuario, nombreReceta) != -1) {
 
             do {
-                sc.nextLine(); 
+ 
                 System.out.println("Acontinuacion selecione lo que desea editar\n");
 
                 System.out.println("\t1. Nombre");
@@ -488,29 +488,29 @@ public class Menu {
                 //System.out.println("\t6. Cancelar");
 
                 try {
-                    respuesta = sc.nextInt(); //Se captura la respuesta  del usuario
+                    respuesta = Integer.parseInt( sc.nextLine());  //Se captura la respuesta  del usuario
 
                     switch (respuesta) {
                         case 1:
                             exit = 1; 
                             System.out.println("Porfavor ingrese el nuevo nombre");
-                            opciones[0] = sc.next(); 
+                            opciones[0] = sc.nextLine(); 
                             break;
                         case 2:
                             System.out.println("Porfavor ingrese la nueva descripción");
-                            opciones[1] = sc.next();
+                            opciones[1] = sc.nextLine();
                             break;
                         case 3:
                             System.out.println("Porfavor ingrese los ingredientes");
-                            opciones[2] = sc.next();
+                            opciones[2] = sc.nextLine();
                             break;
                         case 4:
                             System.out.println("Porfavor ingrese la preparacion");
-                            opciones[3] = sc.next();
+                            opciones[3] = sc.nextLine();
                             break;
                         case 5:
                             System.out.println("Profavor ingese la cantidad de ración ");
-                            opciones[4] = sc.next();
+                            opciones[4] = sc.nextLine();
                             break;
                         case 6:
                             //Se debe sustituir
@@ -527,12 +527,14 @@ public class Menu {
                 //Emula un boton de enviar
                 System.out.println("¿Quiere enviar los datos? Si es el caso ingrese 'si' de lo cotnrario oprima otra tecla");
                 reintentar = sc.next();
+                sc.nextLine(); 
                 if (reintentar.equals("si")) {
                     exit = -1;
                     operadora.getLogica().editarReceta(indiseUsuario, nombreReceta, opciones);
                 }
                 System.out.println("¿Quiere editar algo mas? Si es el caso ingrese 'si' de lo cotnrario oprima otra tecla");
                 reintentar = sc.next();
+                sc.nextLine(); 
                 if (reintentar.equals("si")) {
                     exit = 0;
                 } else {   //Envia al menu principal  
@@ -545,6 +547,7 @@ public class Menu {
         } else {
             System.out.println("La receta no existe porfavor intentelo de nuevo, Quiere volver al menu principal, escriba 'si' de lo contrario oprima otra tecla");
             res = sc.next(); 
+            sc.nextLine(); 
             if (res.equals("si")) {
                 editarReceta(indiseUsuario);
             }else{
