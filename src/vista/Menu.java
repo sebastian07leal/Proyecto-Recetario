@@ -67,7 +67,7 @@ public class Menu {
 
         } while (exit == 0);
     }
-
+   // ********************************************************************************Terminado 
     //Este metodo simula la interfaz de usuario (Iniciar Sesion) 
     public void iniciarSecion() {
         this.operadora = new Operadora();
@@ -144,6 +144,7 @@ public class Menu {
 
     public void eliminarUsuario(int indiceUsuario) {
         operadora = new Operadora();
+
         sc = new Scanner(System.in);
         String contrasenaEnviada;
         String respuesta;
@@ -152,12 +153,11 @@ public class Menu {
         contrasenaEnviada = sc.nextLine();
         if (operadora.getLogica().eliminarUsuario(indiceUsuario, contrasenaEnviada)) {
             System.out.println("El se a eliminado cone exito");
-            initPage();
         } else {
             System.out.println("¿Desea intentarlo de nuevo? escriba 'si'  de lo contrario oprima otra palabra");
             respuesta = sc.nextLine();
             if (respuesta.equals("si")) {
-                eliminarReceta(indiceUsuario);
+                eliminarUsuario(indiceUsuario);
             } else {
                 generarMenu(indiceUsuario);
             }
@@ -232,14 +232,16 @@ public class Menu {
     public void menuRecuperarCuenta() {
         sc = new Scanner(System.in);
         operadora = new Operadora();
-        operadora.getArchivar().traerListadoDeUsuarios(); //Es obligatorio llamar este metodo parar poder obtener los datos de los usuarios
+        //Este metodo se debe quitar 
         //Se obtiene el nombre de usuario para ralizar la busqueda y traer los datos de dicho usuario
         System.out.println("Para recuperar su contraseña porfavor ingrese su nombre de usuario acontinuacion");
         this.nombreIngresado = sc.nextLine();
         //Se llama el metodo encargado de realizar la busqueda y el indice donde se encuentra en el array si el usuario no existe, se le da aviso al usuario
         System.out.println("Ingrese la palabra de recuperacion");
         this.palabraIngresada = sc.nextLine();
-
+        
+        //*******************************************************************************************
+        
         if (operadora.getLogica().comprobarPalabra(this.nombreIngresado, this.palabraIngresada)) {
             System.out.println("Porfavor cambia tu contraseña y palabra");
             menuEditarPerfil(this.nombreIngresado);
@@ -252,12 +254,13 @@ public class Menu {
                 initPage();
             }
         }
+        
+        //*************************************************************************************************
     }
 
     @SuppressWarnings("InfiniteRecursion")
     public void menuEditarPerfil(String usuarioIngresado) {
         this.operadora = new Operadora();
-        operadora.getArchivar().traerListadoDeUsuarios();
         int indiseUsuario = operadora.getLogica().ubicacionDeUsuarioPorIndice(usuarioIngresado);
         String nueva = "";
         String nuevaConfirmacion;
