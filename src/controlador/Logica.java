@@ -6,7 +6,6 @@ import modelo.*;
 public class Logica {
 
     //Este objeto nos permite conectarnos con la clase menu
-    private Operadora operadora;
     private Archivar archivar; 
     //Variables reales; 
     private int posicionDelUsuario;
