@@ -433,6 +433,41 @@ public class Logica {
         return respuesta;
     }
 
+    
+    //Metódo Nuevo ****************************************************************************************************************************
+    //Recibe un obgeto de tipo Array rellenado con Strings  
+    public boolean guardarTips (ArrayList<String> tips){
+        Archivar archivar = new Archivar(); 
+        boolean respuesta = false;
+        archivar.traerTips();
+        //
+        
+        if (archivar.guardarTips(tips)) {
+            System.out.println("Envio true");
+        }else{
+            System.out.println("Error al guardar //Logica");
+        }
+        
+        return respuesta; 
+    }
+    
+    
+    public  ArrayList<String> traerTips(){
+        archivar = new Archivar(); //permite comunicación con la lógica
+        ArrayList<String> enviado = new ArrayList<String>();  //Se guardan la lista de tips
+        archivar.traerTips();   //Es necesario traer los tips para poder hacer una copia de los mismos
+        
+        enviado = archivar.getTipsStrings();  //Crea una copia de los String almacenados
+        
+        if (enviado == null) {
+            System.out.println("Error archivo basio");
+        }
+        
+        System.out.println("tips enviados"+enviado);
+        
+        return enviado; 
+    }
+    
     //Get y Set de las variables basicas 
     public String getNombreRecibido() {
         return nombreRecibido;

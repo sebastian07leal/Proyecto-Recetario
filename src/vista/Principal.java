@@ -8,6 +8,7 @@ import controlador.Archivar;
 import controlador.Operadora;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import javax.swing.JPanel;
 import modelo.Usuario;
 /**
@@ -109,9 +110,23 @@ public class Principal extends javax.swing.JFrame {
         Operadora operadora = new Operadora(); 
         Archivar archivar = new Archivar(); 
         
-         archivar.traerListadoDeUsuarios();
+        ArrayList<String>envia = new ArrayList<String>(); 
+        //archivar.traerTips();
+        String sebas = "tian"; 
+        String sam = "cam"; 
+        String com =  "lalal"; 
+        
+        envia.add(sebas); 
+        envia.add(sam); 
+        envia.add(com); 
+        
+        operadora.getLogica().guardarTips(envia); 
+        
+
+       
+       operadora.getLogica().traerTips(); 
          
-         System.out.println(archivar.getListaDeUsuarios()); 
+         
 
         
         

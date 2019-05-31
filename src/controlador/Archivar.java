@@ -12,6 +12,7 @@ public class Archivar {
     private File nuevo; //Es el archivo donde se guardan el Obgeto array lis en el equiipo
     private ArrayList<Usuario> listaDeUsuarios = new ArrayList<Usuario>(); //Es el array principal, es donde se guardan los usuarios cuando el programa esta en ejecucion
     private ArrayList<Receta> recetasDeUsuaros = new ArrayList<Receta>();
+    private ArrayList<String> tipsStrings = new ArrayList<String>(); 
 
     //constructor de comunicacion
     public Archivar() {
@@ -42,6 +43,7 @@ public class Archivar {
         return creado;
     }
 
+   
     //Este metodo se sobrecarga para poder modificar partes de una lista y sobre escribirla, a diferencia del metodo anterior este recibe listas completas, el otro añade objetos
     public boolean guardar(ArrayList<Usuario> listaEnviada) {
         boolean creado = false;
@@ -66,6 +68,28 @@ public class Archivar {
         }
         return creado;
     }
+    
+    public boolean guardarTips(ArrayList<String> tipsEnviados){
+        boolean creado = false; 
+        //Se debe crear la lista de usuarios despues de crear el archivo
+        traerTips();
+        //Se envia la anterior a la lista modificada 
+        this.tipsStrings = tipsEnviados; 
+        try {
+            //Se crea el archivo y se guarda en la ubicación por defecto
+            nuevo = new File("Tips.txt");
+            //Se crea el canal para enviar el archivo
+            envioDeDatos = new ObjectOutputStream(new FileOutputStream(nuevo));
+            envioDeDatos.writeObject(this.tipsStrings);
+            envioDeDatos.close();
+            creado = true;  //Si llega acá significa que no hay errores
+        } catch (Exception e) {
+            System.out.println("Error al guardar los tips //Archvar");
+            creado = false; 
+        }
+        
+        return creado; 
+    }
 
     /*Para que la persistencia afuncione antes de realizar la creacion de un nuevo usuario es necesario 
      revisar que contiene el archivo antes creado*/
@@ -78,6 +102,17 @@ public class Archivar {
 
         } catch (Exception e) {
             System.out.println("HAY UN ERROR en traer listado");
+        }
+    }
+    
+    public void traerTips(){
+        nuevo = new File("Tips.txt");
+        try {
+            traerDatos = new ObjectInputStream(new FileInputStream(nuevo));
+            tipsStrings = (ArrayList<String>) traerDatos.readObject(); 
+            traerDatos.close();
+        } catch (Exception e) {
+            System.out.println("Error al traer usuarios //Archivar");
         }
     }
 
@@ -152,6 +187,10 @@ public class Archivar {
         return this.recetasDeUsuaros;
     }
 
+    public ArrayList<String> getTipsStrings() {
+        return tipsStrings;
+    }
+    
     public File getNuevo() {
         return this.nuevo;
     }

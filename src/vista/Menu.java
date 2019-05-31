@@ -43,11 +43,11 @@ public class Menu {
                         break;
                     case 2:
                         exit = -1;
-                        crearUsuario();
+                        //crearUsuario();
                         break;
                     case 3:
                         exit = -1;
-                        menuRecuperarCuenta();
+                       // menuRecuperarCuenta();
                         break;
                     case 4:
                         exit = -1;  // -1 Es para que salga del bucle 
@@ -95,7 +95,7 @@ public class Menu {
         } while (exit == 0);
 
     }
-
+/*
     public void crearUsuario() {
         this.operadora = new Operadora();
         sc = new Scanner(System.in);
@@ -140,7 +140,7 @@ public class Menu {
 
             }
         } while (exit == 0);
-    }
+    }*/
 
     public void eliminarUsuario(int indiceUsuario) {
         operadora = new Operadora();
@@ -228,7 +228,7 @@ public class Menu {
             }
         } while (exit == 0);
     }
-
+/*
     public void menuRecuperarCuenta() {
         sc = new Scanner(System.in);
         operadora = new Operadora();
@@ -256,7 +256,7 @@ public class Menu {
         }
         
         //*************************************************************************************************
-    }
+    }*/
 
     @SuppressWarnings("InfiniteRecursion")
     public void menuEditarPerfil(String usuarioIngresado) {
