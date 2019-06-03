@@ -5,12 +5,16 @@
  */
 package vista;
 
+import controlador.Operadora;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author DUARTE MENDEZ
  */
 public class AñadirReceta extends javax.swing.JPanel {
     private Principal principal;
+    private Operadora operadora;
     /**
      * Creates new form AñadirReceta
      */
@@ -31,20 +35,23 @@ public class AñadirReceta extends javax.swing.JPanel {
         configusuario = new javax.swing.JButton();
         buscartxt = new javax.swing.JTextField();
         buscar = new javax.swing.JButton();
-        nombretxt = new javax.swing.JLabel();
+        txtnombre = new javax.swing.JLabel();
         nombre = new javax.swing.JTextField();
-        ingredientestxt = new javax.swing.JLabel();
+        txtingredientes = new javax.swing.JLabel();
         ingredientes = new javax.swing.JTextField();
-        preparaciontxt = new javax.swing.JLabel();
+        txtpreparacion = new javax.swing.JLabel();
         preparacion = new javax.swing.JTextField();
-        descripciontxt = new javax.swing.JLabel();
+        txtdescripcion = new javax.swing.JLabel();
         descripcion = new javax.swing.JTextField();
+        txtcantidadpersonas = new javax.swing.JLabel();
+        cantplatos = new javax.swing.JTextField();
         cancelar = new javax.swing.JButton();
         guardar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         marcaagua = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
@@ -64,33 +71,46 @@ public class AñadirReceta extends javax.swing.JPanel {
         buscar.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         buscar.setForeground(new java.awt.Color(0, 51, 153));
         buscar.setText("Buscar");
+        buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarActionPerformed(evt);
+            }
+        });
         add(buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 120, 40));
 
-        nombretxt.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
-        nombretxt.setForeground(new java.awt.Color(255, 153, 0));
-        nombretxt.setText("Nombre");
-        add(nombretxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 90, -1));
+        txtnombre.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        txtnombre.setForeground(new java.awt.Color(255, 153, 0));
+        txtnombre.setText("Nombre");
+        add(txtnombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 90, -1));
 
         nombre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, 190, 30));
 
-        ingredientestxt.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
-        ingredientestxt.setForeground(new java.awt.Color(255, 153, 0));
-        ingredientestxt.setText("Ingredientes");
-        add(ingredientestxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 150, -1));
+        txtingredientes.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        txtingredientes.setForeground(new java.awt.Color(255, 153, 0));
+        txtingredientes.setText("Ingredientes");
+        add(txtingredientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 150, -1));
         add(ingredientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 200, 260, 70));
 
-        preparaciontxt.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
-        preparaciontxt.setForeground(new java.awt.Color(255, 153, 0));
-        preparaciontxt.setText("Preparacion");
-        add(preparaciontxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, 140, -1));
+        txtpreparacion.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        txtpreparacion.setForeground(new java.awt.Color(255, 153, 0));
+        txtpreparacion.setText("Preparacion");
+        add(txtpreparacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, 140, -1));
         add(preparacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, 260, 60));
 
-        descripciontxt.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
-        descripciontxt.setForeground(new java.awt.Color(255, 153, 0));
-        descripciontxt.setText("Descripcion");
-        add(descripciontxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 370, 140, 30));
+        txtdescripcion.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        txtdescripcion.setForeground(new java.awt.Color(255, 153, 0));
+        txtdescripcion.setText("Descripcion");
+        add(txtdescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 370, 140, 30));
         add(descripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 370, 260, 80));
+
+        txtcantidadpersonas.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        txtcantidadpersonas.setForeground(new java.awt.Color(255, 153, 0));
+        txtcantidadpersonas.setText("Cantidad de personas");
+        add(txtcantidadpersonas, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 470, 200, 50));
+
+        cantplatos.setText("solo numeros");
+        add(cantplatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 470, 210, 40));
 
         cancelar.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
         cancelar.setForeground(new java.awt.Color(0, 51, 153));
@@ -100,12 +120,17 @@ public class AñadirReceta extends javax.swing.JPanel {
                 cancelarActionPerformed(evt);
             }
         });
-        add(cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 490, 90, -1));
+        add(cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 540, 90, -1));
 
         guardar.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
         guardar.setForeground(new java.awt.Color(0, 51, 153));
         guardar.setText("Guardar");
-        add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 490, -1, -1));
+        guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarActionPerformed(evt);
+            }
+        });
+        add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 540, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/Nombre.png"))); // NOI18N
         jLabel1.setToolTipText("");
@@ -120,6 +145,9 @@ public class AñadirReceta extends javax.swing.JPanel {
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/descripcion.png"))); // NOI18N
         jLabel4.setText("jLabel4");
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, 40, -1));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/Preparacion.png"))); // NOI18N
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 470, 40, 50));
 
         marcaagua.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 11)); // NOI18N
         marcaagua.setForeground(new java.awt.Color(255, 255, 255));
@@ -138,27 +166,38 @@ public class AñadirReceta extends javax.swing.JPanel {
         volver();
     }//GEN-LAST:event_cancelarActionPerformed
 
+    private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
+        guardar();
+    }//GEN-LAST:event_guardarActionPerformed
+
+    private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
+        busqueda();
+    }//GEN-LAST:event_buscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscar;
     private javax.swing.JTextField buscartxt;
     private javax.swing.JButton cancelar;
+    private javax.swing.JTextField cantplatos;
     private javax.swing.JButton configusuario;
     private javax.swing.JTextField descripcion;
-    private javax.swing.JLabel descripciontxt;
     private javax.swing.JLabel fondo;
     private javax.swing.JButton guardar;
     private javax.swing.JTextField ingredientes;
-    private javax.swing.JLabel ingredientestxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel marcaagua;
     private javax.swing.JTextField nombre;
-    private javax.swing.JLabel nombretxt;
     private javax.swing.JTextField preparacion;
-    private javax.swing.JLabel preparaciontxt;
+    private javax.swing.JLabel txtcantidadpersonas;
+    private javax.swing.JLabel txtdescripcion;
+    private javax.swing.JLabel txtingredientes;
+    private javax.swing.JLabel txtnombre;
+    private javax.swing.JLabel txtpreparacion;
     // End of variables declaration//GEN-END:variables
 
     private void configusu() {
@@ -167,5 +206,40 @@ public class AñadirReceta extends javax.swing.JPanel {
 
     private void volver() {
         principal.irmenu(this);
+    }
+    private void busqueda() {
+        this.operadora=new Operadora();
+        int p;
+        if(buscartxt.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Lo sentimos no has escrito un nombre");
+        }else{
+            p=operadora.getLogica().buscarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), buscartxt.getText());
+            if(-1 == p){
+                JOptionPane.showMessageDialog(null, "no existe");
+            }else{
+                principal.setUbicacion(p);
+                principal.setNombrerec(buscartxt.getText());
+                principal.irMostrarReceta(this);
+            }
+        }
+        
+    }
+    private void guardar() {
+        this.operadora=new Operadora();
+        if(nombre.getText().equals("") || ingredientes.getText().equals("") || preparacion.getText().equals("") || descripcion.getText().equals("") || cantplatos.getText().equals("solo numeros")){
+            JOptionPane.showMessageDialog(null, "Tienes alguna casilla vacia");
+        }else{
+            int platos= Integer.parseInt(cantplatos.getText());
+            if(operadora.getLogica().validarNuevaReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), nombre.getText(), ingredientes.getText(), preparacion.getText(), descripcion.getText(), platos)){
+                JOptionPane.showMessageDialog(null, "Guardada con exito");
+                nombre.setText("");
+                ingredientes.setText("");
+                preparacion.setText("");
+                descripcion.setText("");
+                cantplatos.setText("");
+            }else{
+                JOptionPane.showMessageDialog(null, "Upss Ah ocurrido un error");
+            }
+        }
     }
 }

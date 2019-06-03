@@ -5,18 +5,35 @@
  */
 package vista;
 
+import controlador.Archivar;
+import controlador.Operadora;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author DUARTE MENDEZ
  */
 public class MisRecetas extends javax.swing.JPanel {
+    DefaultTableModel modelo;
     Principal principal;
+    private Operadora operadora;
+    private Archivar archivar;
     /**
      * Creates new form MisRecetas
      */
     public MisRecetas(Principal principal) {
+        this.operadora=new Operadora();
         this.principal=principal;
         initComponents();
+        modelo= new DefaultTableModel();
+        modelo.addColumn("Nombre");
+        modelo.addColumn("descripcion");
+        this.jTable1.setModel(modelo);
+        operadora.getLogica().verRecetas(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), "propia");
+        //System.out.println(operadora.getReceta());
+        //DefaultTableModel addRow = modelo.addRow(archivar.traerRcetas(principal.getUsuariotem()));
+        
     }
 
     /**
@@ -37,6 +54,7 @@ public class MisRecetas extends javax.swing.JPanel {
         recetas = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         editar = new javax.swing.JButton();
+        eliminar = new javax.swing.JButton();
         marcaagua = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
@@ -59,6 +77,11 @@ public class MisRecetas extends javax.swing.JPanel {
         buscar.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         buscar.setForeground(new java.awt.Color(0, 51, 102));
         buscar.setText("Buscar");
+        buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarActionPerformed(evt);
+            }
+        });
         add(buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 120, 40));
 
         volver.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
@@ -90,7 +113,7 @@ public class MisRecetas extends javax.swing.JPanel {
                 misrecetasActionPerformed(evt);
             }
         });
-        add(misrecetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 550, 160, 30));
+        add(misrecetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 510, 160, 30));
 
         jTable1.setBorder(new javax.swing.border.MatteBorder(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo.jpg")))); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -104,6 +127,11 @@ public class MisRecetas extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         recetas.setViewportView(jTable1);
 
         add(recetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 710, -1));
@@ -117,6 +145,16 @@ public class MisRecetas extends javax.swing.JPanel {
             }
         });
         add(editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 550, 160, 30));
+
+        eliminar.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
+        eliminar.setForeground(new java.awt.Color(0, 51, 102));
+        eliminar.setText("Eliminar");
+        eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarActionPerformed(evt);
+            }
+        });
+        add(eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 550, 160, 30));
 
         marcaagua.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 11)); // NOI18N
         marcaagua.setForeground(new java.awt.Color(255, 255, 255));
@@ -147,6 +185,19 @@ public class MisRecetas extends javax.swing.JPanel {
         editar();
     }//GEN-LAST:event_editarActionPerformed
 
+    private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
+        eliminar();
+    }//GEN-LAST:event_eliminarActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        
+        
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
+        buscar();
+    }//GEN-LAST:event_buscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField buscador;
@@ -154,6 +205,7 @@ public class MisRecetas extends javax.swing.JPanel {
     private javax.swing.JButton cerrarsesion;
     private javax.swing.JButton configusuario;
     private javax.swing.JButton editar;
+    private javax.swing.JButton eliminar;
     private javax.swing.JLabel fondo;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel marcaagua;
@@ -180,5 +232,29 @@ public class MisRecetas extends javax.swing.JPanel {
 
     private void editar() {
         principal.irEditarReceta(this);
+    }
+
+    private void eliminar() {
+        this.operadora= new Operadora();
+        //operadora.getLogica().eliminarR(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), jTable1.getValueAt(jTable1MouseClicked(evt), jTable1MouseClicked(evt)));
+        
+        
+    }
+    private void buscar() {
+        this.operadora=new Operadora();
+        int p;
+        if(buscador.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Lo sentimos no has escrito un nombre");
+        }else{
+            p=operadora.getLogica().buscarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), buscador.getText());
+            if(-1 == p){
+                JOptionPane.showMessageDialog(null, "no existe");
+            }else{
+                principal.setUbicacion(p);
+                principal.setNombrerec(buscador.getText());
+                principal.irMostrarReceta(this);
+            }
+        }
+        
     }
 }

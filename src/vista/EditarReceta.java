@@ -5,12 +5,16 @@
  */
 package vista;
 
+import controlador.Operadora;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author DUARTE MENDEZ
  */
 public class EditarReceta extends javax.swing.JPanel {
     private Principal principal;
+    private Operadora operadora;
     /**
      * Creates new form AñadirReceta
      */
@@ -47,6 +51,9 @@ public class EditarReceta extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtcantidadpersonas = new javax.swing.JLabel();
+        cantplatos = new javax.swing.JTextField();
         fondo = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -65,6 +72,11 @@ public class EditarReceta extends javax.swing.JPanel {
         buscar.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         buscar.setForeground(new java.awt.Color(0, 51, 153));
         buscar.setText("Buscar");
+        buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarActionPerformed(evt);
+            }
+        });
         add(buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 120, 40));
 
         nombretxt.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
@@ -106,12 +118,12 @@ public class EditarReceta extends javax.swing.JPanel {
                 cancelarActionPerformed(evt);
             }
         });
-        add(cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 490, 90, -1));
+        add(cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 540, 90, -1));
 
         guardar.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
         guardar.setForeground(new java.awt.Color(0, 51, 153));
         guardar.setText("Guardar");
-        add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 490, -1, -1));
+        add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 540, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 153, 0));
@@ -132,6 +144,17 @@ public class EditarReceta extends javax.swing.JPanel {
         jLabel4.setText("jLabel4");
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, 40, -1));
 
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/Preparacion.png"))); // NOI18N
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 470, 40, 50));
+
+        txtcantidadpersonas.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        txtcantidadpersonas.setForeground(new java.awt.Color(255, 153, 0));
+        txtcantidadpersonas.setText("Cantidad de personas");
+        add(txtcantidadpersonas, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 470, 200, 50));
+
+        cantplatos.setText("solo numeros");
+        add(cantplatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 470, 210, 40));
+
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo3.jpg"))); // NOI18N
         add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
@@ -144,11 +167,16 @@ public class EditarReceta extends javax.swing.JPanel {
         volver();
     }//GEN-LAST:event_cancelarActionPerformed
 
+    private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
+        busqueda();
+    }//GEN-LAST:event_buscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscar;
     private javax.swing.JTextField buscartxt;
     private javax.swing.JButton cancelar;
+    private javax.swing.JTextField cantplatos;
     private javax.swing.JButton configusuario;
     private javax.swing.JTextField descripcion;
     private javax.swing.JLabel descripciontxt;
@@ -161,17 +189,35 @@ public class EditarReceta extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel marcaagua;
     private javax.swing.JTextField nombre;
     private javax.swing.JLabel nombretxt;
     private javax.swing.JTextField preparacion;
     private javax.swing.JLabel preparaciontxt;
+    private javax.swing.JLabel txtcantidadpersonas;
     // End of variables declaration//GEN-END:variables
 
     private void configusu() {
         principal.irConfigcuenta(this);
     }
-
+    private void busqueda() {
+        this.operadora=new Operadora();
+        int p;
+        if(buscar.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Lo sentimos no has escrito un nombre");
+        }else{
+            p=operadora.getLogica().buscarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), buscar.getText());
+            if(-1 == p){
+                JOptionPane.showMessageDialog(null, "no existe");
+            }else{
+                principal.setUbicacion(p);
+                principal.setNombrerec(buscar.getText());
+                principal.irMostrarReceta(this);
+            }
+        }
+        
+    }
     private void volver() {
         principal.irMisRecetas(this);
     }

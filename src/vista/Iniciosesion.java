@@ -5,11 +5,17 @@
  */
 package vista;
 
+import controlador.Archivar;
+import controlador.Operadora;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author DUARTE MENDEZ
  */
 public class Iniciosesion extends javax.swing.JPanel {
+    private Archivar archivar;
+    private Operadora operadora;
     private Principal principal;
     /**
      * Creates new form Iniciosesion
@@ -142,7 +148,19 @@ public class Iniciosesion extends javax.swing.JPanel {
 
     private void entrar() {
         
-        principal.irmenu(this);
+        this.operadora =new Operadora();
+        if(usuario.getText().equals("") || contraseña.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Falta digitar en alguna casilla");
+        }else{
+            if(operadora.getLogica().validarInicoDeSesion(usuario.getText(), contraseña.getText())){
+                principal.setUsuariotem(usuario.getText());
+                principal.irmenu(this);
+            }else{
+                JOptionPane.showMessageDialog(null, "error en usuario o contraseña");
+            }
+        }
+        usuario.setText("");
+        contraseña.setText("");
     }
 
     private void registrar() {

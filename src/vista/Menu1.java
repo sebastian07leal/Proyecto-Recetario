@@ -5,11 +5,15 @@
  */
 package vista;
 
+import controlador.Operadora;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author DUARTE MENDEZ
  */
 public class Menu1 extends javax.swing.JPanel {
+    private Operadora operadora;
     private Principal principal;
     /**
      * Creates new form Menu1
@@ -73,6 +77,11 @@ public class Menu1 extends javax.swing.JPanel {
         buscar.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         buscar.setForeground(new java.awt.Color(0, 51, 102));
         buscar.setText("Buscar");
+        buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarActionPerformed(evt);
+            }
+        });
         add(buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 120, 40));
 
         buscador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -164,6 +173,10 @@ public class Menu1 extends javax.swing.JPanel {
         tips();
     }//GEN-LAST:event_tipsActionPerformed
 
+    private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
+        busqueda();
+    }//GEN-LAST:event_buscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton añadirre;
@@ -185,7 +198,23 @@ public class Menu1 extends javax.swing.JPanel {
     private void salir() {
         principal.iriniciars(this);
     }
-
+    private void busqueda() {
+        this.operadora=new Operadora();
+        int p;
+        if(buscador.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Lo sentimos no has escrito un nombre");
+        }else{
+            p=operadora.getLogica().buscarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), buscador.getText());
+            if(-1 == p){
+                JOptionPane.showMessageDialog(null, "no existe");
+            }else{
+                principal.setUbicacion(p);
+                principal.setNombrerec(buscador.getText());
+                principal.irMostrarReceta(this);
+            }
+        }
+        
+    }
     private void añadirrec() {
         principal.irAñadirreceta(this);
     }

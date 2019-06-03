@@ -5,12 +5,16 @@
  */
 package vista;
 
+import controlador.Operadora;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author DUARTE MENDEZ
  */
 public class Registrarse extends javax.swing.JPanel {
     private Principal principal;
+    private Operadora operadora;
     /**
      * Creates new form registrarse
      */
@@ -170,6 +174,27 @@ public class Registrarse extends javax.swing.JPanel {
     }
 
     private void verificar() {
-        principal.iriniciars(this);
+        this.operadora = new Operadora();
+        if(usuario.getText().equals("") || contraseña.getText().equals("") || confirmacont.getText().equals("") || palabrarecuperacion.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Falta algun espacio por llenar");
+        }else{
+            switch(operadora.getLogica().ValidarRegistro(usuario.getText(), contraseña.getText(), confirmacont.getText(), palabrarecuperacion.getText())){
+                case 0:
+                    JOptionPane.showMessageDialog(null, "Cargado con exito");
+                    principal.iriniciars(this);
+                    break;
+                case 1:
+                    JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(null, "Usuario ya existe");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "error manin");
+                    break;
+            }
+                    
+        }
+        
     }
 }

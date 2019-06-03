@@ -8,14 +8,14 @@ public class Operadora {
 
     //Estos objetos permiten comunicarse con las demas clases
     private final Receta receta;
-    private final Menu menu;
+    
     private final Logica logica;
     private final Usuario usuario;
 
     public Operadora() {
 
         this.receta = new Receta();
-        this.menu = new Menu();
+        
         this.logica = new Logica();
         this.usuario = new Usuario();
     }
@@ -24,9 +24,6 @@ public class Operadora {
         return receta;
     }
 
-    public Menu getMenu() {
-        return menu;
-    }
 
     public Logica getLogica() {
         return logica;

@@ -5,18 +5,29 @@
  */
 package vista;
 
+import controlador.Operadora;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author DUARTE MENDEZ
  */
 public class Recetas extends javax.swing.JPanel {
+    DefaultTableModel modelo;
     Principal principal;
+    private Operadora operadora;
     /**
      * Creates new form Recetas
      */
     public Recetas(Principal principal) {
         this.principal=principal;
         initComponents();
+        modelo= new DefaultTableModel();
+        modelo.addColumn("Nombre");
+        modelo.addColumn("descripcion");
+        this.jTable1.setModel(modelo);
+        
     }
 
     /**
@@ -58,6 +69,11 @@ public class Recetas extends javax.swing.JPanel {
         buscar.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         buscar.setForeground(new java.awt.Color(0, 51, 102));
         buscar.setText("Buscar");
+        buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarActionPerformed(evt);
+            }
+        });
         add(buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 120, 40));
 
         cerrarsesion.setBackground(new java.awt.Color(153, 153, 153));
@@ -131,6 +147,10 @@ public class Recetas extends javax.swing.JPanel {
         misrecetas();
     }//GEN-LAST:event_misrecetasActionPerformed
 
+    private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
+        busqueda();
+    }//GEN-LAST:event_buscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField buscador;
@@ -148,7 +168,23 @@ public class Recetas extends javax.swing.JPanel {
     private void configusu() {
         principal.irConfigcuenta(this);
     }
-
+    private void busqueda() {
+        this.operadora=new Operadora();
+        int p;
+        if(buscador.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Lo sentimos no has escrito un nombre");
+        }else{
+            p=operadora.getLogica().buscarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), buscador.getText());
+            if(-1 == p){
+                JOptionPane.showMessageDialog(null, "no existe");
+            }else{
+                principal.setUbicacion(p);
+                principal.setNombrerec(buscador.getText());
+                principal.irMostrarReceta(this);
+            }
+        }
+        
+    }
     private void salir() {
         principal.iriniciars(this);
     }

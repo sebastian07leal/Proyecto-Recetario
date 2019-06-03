@@ -5,12 +5,16 @@
  */
 package vista;
 
+import controlador.Operadora;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author DUARTE MENDEZ
  */
 public class Configcuenta extends javax.swing.JPanel {
     private Principal principal;
+    private Operadora operadora;
     /**
      * Creates new form Configcuenta
      */
@@ -120,12 +124,22 @@ public class Configcuenta extends javax.swing.JPanel {
         guardarpalabra.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         guardarpalabra.setForeground(new java.awt.Color(102, 204, 0));
         guardarpalabra.setText("Guardar");
+        guardarpalabra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarpalabraActionPerformed(evt);
+            }
+        });
         add(guardarpalabra, new org.netbeans.lib.awtextra.AbsoluteConstraints(613, 330, -1, -1));
 
         guardarcontraseña.setBackground(new java.awt.Color(204, 0, 51));
         guardarcontraseña.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         guardarcontraseña.setForeground(new java.awt.Color(102, 204, 0));
         guardarcontraseña.setText("Guardar");
+        guardarcontraseña.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarcontraseñaActionPerformed(evt);
+            }
+        });
         add(guardarcontraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(613, 148, -1, -1));
 
         volver.setBackground(new java.awt.Color(204, 0, 51));
@@ -153,8 +167,16 @@ public class Configcuenta extends javax.swing.JPanel {
     }//GEN-LAST:event_volverActionPerformed
 
     private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
-        inicio();
+        eliminarcuenta();
     }//GEN-LAST:event_eliminarActionPerformed
+
+    private void guardarcontraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarcontraseñaActionPerformed
+        cambiocontraseña();
+    }//GEN-LAST:event_guardarcontraseñaActionPerformed
+
+    private void guardarpalabraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarpalabraActionPerformed
+        cambiopalabra();
+    }//GEN-LAST:event_guardarpalabraActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -182,7 +204,69 @@ public class Configcuenta extends javax.swing.JPanel {
     private void menu() {
         principal.irmenu(this);
     }
-    private void inicio(){
-        principal.iriniciars(this);
+   
+
+    private void cambiocontraseña() {
+        this.operadora = new Operadora();
+        if(contraseña.getText().equals("") || conficontra.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Alguna casilla esta vacia");
+        }else{
+            switch(operadora.getLogica().cambiarContrasena(principal.getUsuariotem(), contraseña.getText(), conficontra.getText())){
+                case 0:
+                    JOptionPane.showMessageDialog(null, "Cambio de contraseña acertado");
+                    contraseña.setText("");
+                    conficontra.setText("");
+                    break;
+                case 1:
+                    JOptionPane.showMessageDialog(null, "Contraseñas no coinciden");
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(null, "Error al momento de guardar en base de datos");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Manin Error de parametros");
+                    break;
+            }
+        }
+    }
+
+    private void cambiopalabra() {
+        this.operadora = new Operadora();
+        if(palbrarecu.getText().equals("") || confipalabra.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Alguna casilla esta vacia");
+        }else{
+            switch(operadora.getLogica().cambiarPalabra(principal.getUsuariotem(), palbrarecu.getText(), confipalabra.getText())){
+                case 0:
+                    JOptionPane.showMessageDialog(null, "Cambio de palabra acertado");
+                    palbrarecu.setText("");
+                    confipalabra.setText("");
+                    break;
+                case 1:
+                    JOptionPane.showMessageDialog(null, "Palabras no coinciden");
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(null, "No se encontro al usuario");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Error en persistencia");
+                    break;
+            }
+        }
+    }
+
+    private void eliminarcuenta() {
+        this.operadora = new Operadora();
+        if(contraseñaactual.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Porfavor digite una contraseña");
+        }else{
+            if(operadora.getLogica().eliminarUsuario(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), contraseñaactual.getText())){
+                principal.iriniciars(this);
+                JOptionPane.showMessageDialog(null, "Lamentamos que tengas que hacerlo");
+            }else{
+                JOptionPane.showMessageDialog(null, "Uy tu contraseña actual no es esa");
+            }
+        }
+        
+        
     }
 }

@@ -46,9 +46,9 @@ public class Logica {
     }
 
     //valida el registro hecho
-    public boolean ValidarRegistro(String nombreEnviado, String contrasenaEnviada, String contrasenaConfirmada, String palaEnviada) {
+    public int ValidarRegistro(String nombreEnviado, String contrasenaEnviada, String contrasenaConfirmada, String palaEnviada) {
         archivar = new Archivar(); 
-        boolean usuarioCreado = false;
+        int usuarioCreado = 2;
         this.nombreRecibido = nombreEnviado;
         this.contrasenaRecibida = contrasenaEnviada;
         this.confirmContrasena = contrasenaConfirmada;
@@ -61,15 +61,16 @@ public class Logica {
                 //Se crea el obgeto  usuario
                 this.usuario = new Usuario(this.nombreRecibido, this.contrasenaRecibida, this.palabraRecibida);
                 //Se envia el nuevo usuario para a guardar en el listado de archivos, si la respuesta es False significa que hubo un error al crear el usuario en el archivo     
-                usuarioCreado = archivar.guardarUsuario(this.usuario);
+                usuarioCreado = 0;
+                archivar.guardarUsuario(this.usuario);
             } else {
                 //Si las contraseñas no considen se debe volver a ingresar los datos
                 System.out.println("Error las contraseñas no coinciden");
-                usuarioCreado = false; 
+                usuarioCreado = 1; 
             }
         } else {
             System.out.println("Error ya existe un usuario asignado con ese nombre " + nombreEnviado);
-            usuarioCreado = false; 
+            usuarioCreado = 2; 
         }  
         return usuarioCreado;
     }
@@ -113,32 +114,32 @@ public class Logica {
     }
 
      //Compuerba que la palabra de recuperación sea correcta
-    public boolean comprobarPalabra(String nombreDeUsuario, String palabraDeRecuperacion) {
+    public int comprobarPalabra(String nombreDeUsuario, String palabraDeRecuperacion) {
         archivar = new Archivar(); 
         archivar.traerListadoDeUsuarios();   //Es obligatorio llamar este metodo parar poder obtener los datos de los usuarios
-        boolean respuesta = false;  //Respuesta del metodo a interfaz 
+        int respuesta = 2;  //Respuesta del metodo a interfaz 
         Usuario datosDeComprobacion;
         if (buscarUsuario(nombreDeUsuario)) {
             datosDeComprobacion = objetoUsuarioEnIndice(this.posicionDelUsuario);
             if (datosDeComprobacion.getPalabraDeRecuperacion().equals(palabraDeRecuperacion)) {
-                respuesta = true;
+                respuesta = 0;
             } else {
                 System.out.println("Error las palabras no coinciden");
-                respuesta = false;
+                respuesta = 1;
             }
         } else {
             //El usuario no existe 
             System.out.println("Error el usuario no existe");
-            respuesta = false;
+            respuesta = 2;
         }
         return respuesta;
     }
     //Se encarga de cambiar la contraseña y guardar los cambios
-    public boolean cambiarContrasena(String nombreDeUsuario, String contrasena, String contrasenaVerificada) {
+    public int cambiarContrasena(String nombreDeUsuario, String contrasena, String contrasenaVerificada) {
         archivar = new Archivar(); 
         archivar.traerListadoDeUsuarios(); //Es obligatorio para el manejo de persistencia
         boolean sePuedeCambiar = false; //Evalua si las contraseñas son correctas
-        boolean respuesta = false;
+        int respuesta = 2;
         //Busca el usuario y genera el indice para sus edicion
         if (buscarUsuario(nombreDeUsuario) == true) {
             //compara las contraseñas para verificar que sean iguales 
@@ -146,7 +147,7 @@ public class Logica {
                 sePuedeCambiar = true;
             } else {
                 System.out.println("Error las contraseñas no coinciden");
-                respuesta = false; 
+                respuesta = 1; 
             }
         }
         //Si se cumple con los requisitos para cambiar la contraseña, se prosede a realizar el cambiar 
@@ -157,19 +158,20 @@ public class Logica {
             listaMomentanea.get(posicionDelUsuario).setContrsena(contrasena);
             //Se llama el metodo con sobrecarga que permite cambiar la lista completa  
             if (archivar.guardar(listaMomentanea)) {
-                respuesta = true; 
+                respuesta = 0; 
             } else {
                 System.out.println("Error al guardar los cambios en persistencia");
+                respuesta =2;
             }
         }
         return respuesta; 
     }
 
-    public boolean cambiarPalabra(String nombreDeUsuario, String palabraRecup, String palabraRecupConfirm) {
+    public int cambiarPalabra(String nombreDeUsuario, String palabraRecup, String palabraRecupConfirm) {
         archivar = new Archivar(); 
         archivar.traerListadoDeUsuarios();
         boolean sePuedeCambiar = false; //Evalua si las contraseñas son correctas
-        boolean respuesta = false;
+        int respuesta = 3;
         //Busca el usuario y genera el indice para sus edicion
         if (buscarUsuario(nombreDeUsuario) == true) {
             //compara las palabras para verificar que sean iguales 
@@ -177,11 +179,11 @@ public class Logica {
                 sePuedeCambiar = true;
             } else {
                 System.out.println("Error las palabras no coinciden");
-                respuesta = false; 
+                respuesta = 1; 
             }
         } else {
             System.out.println("Error no se encontro el usuario");
-            respuesta = false; 
+            respuesta = 2; 
         }
         //Si se cumple con los requisitos para cambiar la contraseña, se prosede a realizar el cambiar 
         if (sePuedeCambiar == true) {
@@ -191,10 +193,10 @@ public class Logica {
             listaMomentanea.get(posicionDelUsuario).setPalabraDeRecuperacion(palabraRecup);
             //Se llama el metodo con sobrecarga que permite cambiar la lista completa        
             if (archivar.guardar(listaMomentanea)) {
-                respuesta = true; 
+                respuesta = 0; 
             } else {
                 System.out.println("Error al realizar el cambio en persistencia");
-                respuesta = false; 
+                respuesta = 3; 
             }
         }
         return respuesta; 
@@ -432,10 +434,6 @@ public class Logica {
         }
         return respuesta;
     }
-
-    
-    //Metódo Nuevo ****************************************************************************************************************************
-    //Recibe un obgeto de tipo Array rellenado con Strings  
     public boolean guardarTips (ArrayList<String> tips){
         Archivar archivar = new Archivar(); 
         boolean respuesta = false;
@@ -463,11 +461,10 @@ public class Logica {
             System.out.println("Error archivo basio");
         }
         
-        System.out.println("tips enviados"+enviado);
         
         return enviado; 
     }
-    
+
     //Get y Set de las variables basicas 
     public String getNombreRecibido() {
         return nombreRecibido;
@@ -491,4 +488,5 @@ public class Logica {
     public void setListaRecetas(ArrayList<Receta> listaReceta) {
         this.listaRecetas = listaReceta;
     }
+    
 }

@@ -12,8 +12,7 @@ public class Archivar {
     private File nuevo; //Es el archivo donde se guardan el Obgeto array lis en el equiipo
     private ArrayList<Usuario> listaDeUsuarios = new ArrayList<Usuario>(); //Es el array principal, es donde se guardan los usuarios cuando el programa esta en ejecucion
     private ArrayList<Receta> recetasDeUsuaros = new ArrayList<Receta>();
-    private ArrayList<String> tipsStrings = new ArrayList<String>(); 
-
+    private ArrayList<String> tipsStrings = new ArrayList<String>();
     //constructor de comunicacion
     public Archivar() {
 
@@ -37,13 +36,12 @@ public class Archivar {
             System.out.println("Revisa donde se esta almacenando el dato regresado java.lang.RuntimeException ");
             creado = false;
         } catch (Exception e) {
-            System.out.println("Entro a otro error en guardar usuario");
+            System.out.println("Entro a otro error en guardar usuario "+e);
             creado = false;
         }
         return creado;
     }
 
-   
     //Este metodo se sobrecarga para poder modificar partes de una lista y sobre escribirla, a diferencia del metodo anterior este recibe listas completas, el otro añade objetos
     public boolean guardar(ArrayList<Usuario> listaEnviada) {
         boolean creado = false;
@@ -63,7 +61,7 @@ public class Archivar {
             System.out.println("Revisa donde se esta almacenando el dato regresado java.lang.RuntimeException ");
             creado = false;
         } catch (Exception e) {
-            System.out.println("Entro a otro error en guardar");
+            System.out.println("Entro a otro error en guardar "+e);
             creado = false;
         }
         return creado;
@@ -84,13 +82,12 @@ public class Archivar {
             envioDeDatos.close();
             creado = true;  //Si llega acá significa que no hay errores
         } catch (Exception e) {
-            System.out.println("Error al guardar los tips //Archvar");
+            System.out.println("Error al guardar los tips //Archvar"+e);
             creado = false; 
         }
         
         return creado; 
     }
-
     /*Para que la persistencia afuncione antes de realizar la creacion de un nuevo usuario es necesario 
      revisar que contiene el archivo antes creado*/
     public void traerListadoDeUsuarios() {
@@ -104,18 +101,17 @@ public class Archivar {
             System.out.println("HAY UN ERROR en traer listado");
         }
     }
-    
     public void traerTips(){
         nuevo = new File("Tips.txt");
         try {
             traerDatos = new ObjectInputStream(new FileInputStream(nuevo));
             tipsStrings = (ArrayList<String>) traerDatos.readObject(); 
             traerDatos.close();
+            System.out.println("Lista de tips"+tipsStrings);
         } catch (Exception e) {
-            System.out.println("Error al traer usuarios //Archivar");
+            System.out.println("Error al traer usuarios //Archivar "+e);
         }
     }
-
     //Este metodo se encarga de buscar los archivos 
     public boolean buscarArchivo(String nombreUser) {
         nuevo = new File(nombreUser + ".txt"); //Se crea un obgeto de tipo file con el  nombre del archivo   
@@ -138,7 +134,7 @@ public class Archivar {
             envioDeDatos.close();
             creado = true;
         } catch (Exception e) {
-            System.out.println("Error al crear el archivo");
+            System.out.println("Error al crear el archivo "+e);
             creado = false;
         }
         return creado;
@@ -157,23 +153,24 @@ public class Archivar {
             envioDeDatos.close();
             editado = true;
         } catch (Exception e) {
-            System.out.println("Error al remplazar el usuario");
+            System.out.println("Error al remplazar el usuario "+e);
             editado = false;
         }
         return editado;
     }
 
+    //Se tiene que tener cuidado con serialversionuid dado que el cambio de verciones puede generar incopatibilidad con el archivo 
     //Se crea un metodo que trae las recetas de los usuarios
     public void traerRcetas(String nombreUsuario) {
         this.nuevo = new File(nombreUsuario + ".txt");
 
         try {
             this.traerDatos = new ObjectInputStream(new FileInputStream(this.nuevo));
-            recetasDeUsuaros = (ArrayList<Receta>) this.traerDatos.readObject();
+            recetasDeUsuaros = (ArrayList<Receta>) this.traerDatos.readObject();    
             traerDatos.close();
         } catch (Exception e) {
             //Aca debe avizar de otra manera
-            System.out.println("Error en traer Recetas");
+            System.out.println("Error en traer Recetas "+e);
         }
 
     }
@@ -186,13 +183,11 @@ public class Archivar {
     public ArrayList<Receta> getRecetasDeUsuario() {
         return this.recetasDeUsuaros;
     }
-
     public ArrayList<String> getTipsStrings() {
         return tipsStrings;
     }
-    
     public File getNuevo() {
         return this.nuevo;
     }
-
+    
 }

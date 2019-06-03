@@ -1,10 +1,27 @@
 package vista;
 
+import controlador.Operadora;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class Tips extends javax.swing.JPanel {
+    DefaultTableModel modelo;
     Principal principal;
+    private Operadora operadora;
     public Tips(Principal principal) {
+        this.operadora= new Operadora();
         this.principal=principal;
         initComponents();
+        modelo= new DefaultTableModel();
+        modelo.addColumn("---*TIPS*---");
+        for (int i = 0; i < operadora.getLogica().traerTips().size(); i++) {
+            String []almacenar = {operadora.getLogica().traerTips().get(i)};
+            modelo.addRow(almacenar);
+            
+        }
+        this.jTable1.setModel(modelo);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -45,6 +62,11 @@ public class Tips extends javax.swing.JPanel {
         buscar.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         buscar.setForeground(new java.awt.Color(0, 51, 102));
         buscar.setText("Buscar");
+        buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarActionPerformed(evt);
+            }
+        });
         add(buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 120, 40));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -58,6 +80,11 @@ public class Tips extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         recetas.setViewportView(jTable1);
 
         add(recetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 710, 150));
@@ -92,16 +119,31 @@ public class Tips extends javax.swing.JPanel {
         añadir.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
         añadir.setForeground(new java.awt.Color(0, 51, 102));
         añadir.setText("Añadir");
+        añadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                añadirActionPerformed(evt);
+            }
+        });
         add(añadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 370, 110, 30));
 
         editar.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
         editar.setForeground(new java.awt.Color(0, 51, 102));
         editar.setText("Editar");
+        editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editarActionPerformed(evt);
+            }
+        });
         add(editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 370, 110, 30));
 
         eliminar.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
         eliminar.setForeground(new java.awt.Color(0, 51, 102));
         eliminar.setText("Eliminar");
+        eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarActionPerformed(evt);
+            }
+        });
         add(eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 370, 110, 30));
 
         jLabel2.setFont(new java.awt.Font("Sitka Text", 3, 14)); // NOI18N
@@ -130,6 +172,29 @@ public class Tips extends javax.swing.JPanel {
         volver();
     }//GEN-LAST:event_volverActionPerformed
 
+    private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
+        busqueda();
+    }//GEN-LAST:event_buscarActionPerformed
+
+    private void añadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadirActionPerformed
+        añadir();
+        relogear();
+    }//GEN-LAST:event_añadirActionPerformed
+
+    private void editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarActionPerformed
+        editar();
+        relogear();
+    }//GEN-LAST:event_editarActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
+        elminar();
+        relogear();
+    }//GEN-LAST:event_eliminarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton añadir;
@@ -148,7 +213,23 @@ public class Tips extends javax.swing.JPanel {
     private javax.swing.JTextField tipsintroducir;
     private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
-
+    private void busqueda() {
+        this.operadora=new Operadora();
+        int p;
+        if(buscador.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Lo sentimos no has escrito un nombre");
+        }else{
+            p=operadora.getLogica().buscarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), buscador.getText());
+            if(-1 == p){
+                JOptionPane.showMessageDialog(null, "no existe");
+            }else{
+                principal.setUbicacion(p);
+                principal.setNombrerec(buscador.getText());
+                principal.irMostrarReceta(this);
+            }
+        }
+        
+    }
     private void configusu() {
         principal.irConfigcuenta(this);
     }
@@ -160,4 +241,67 @@ public class Tips extends javax.swing.JPanel {
     private void salir() {
         principal.iriniciars(this);
     }    
+
+    private void añadir() {
+        this.operadora=new Operadora();
+        if(tipsintroducir.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "escribe algo");
+        }else{
+            int obtener= tipsintroducir.getText().length();
+            if(obtener <= 80){
+                ArrayList<String> guardar= new ArrayList<String>();
+                guardar= operadora.getLogica().traerTips();
+                String uno= tipsintroducir.getText();
+                guardar.add(uno);
+                operadora.getLogica().guardarTips(guardar);
+                JOptionPane.showMessageDialog(null, "Agregado con exito con exito vuelve a entrar a tips para verlo");
+            }else{
+                JOptionPane.showMessageDialog(null, "Es demasiado largo");
+            }
+        }
+    }
+
+    private void editar() {
+        int fila = jTable1.getSelectedRow();
+        this.operadora=new Operadora();
+        if(tipsintroducir.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "escribe algo");
+        }else{
+            int obtener= tipsintroducir.getText().length();
+            if(obtener <= 80){
+                if(fila>=0){
+                    System.out.println(fila);
+                    ArrayList<String> guardar= new ArrayList<String>();
+                    guardar= operadora.getLogica().traerTips();
+                    String uno= tipsintroducir.getText();
+                    guardar.remove(fila);
+                    guardar.add(fila, uno);
+                    operadora.getLogica().guardarTips(guardar);
+                    JOptionPane.showMessageDialog(null, "Editado con exito vuelve a entrar a tips para verlo");
+                }else{
+                    JOptionPane.showMessageDialog(null, "Porfavor selecciona una fila");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Es demasiado largo");
+            }
+        }
+    }
+
+    private void elminar() {
+        
+        int fila = jTable1.getSelectedRow();
+        if(fila<0){
+            JOptionPane.showMessageDialog(null, "porfavor seleccione una fila");
+        }else{
+            System.out.println(fila);
+            ArrayList<String> guardar= new ArrayList<String>();
+            guardar= operadora.getLogica().traerTips();            
+            guardar.remove(fila);            
+            operadora.getLogica().guardarTips(guardar);
+        }
+    }
+
+    private void relogear() {
+        principal.irTips(this);
+    }
 }
