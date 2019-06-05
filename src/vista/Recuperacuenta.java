@@ -6,6 +6,7 @@
 package vista;
 
 import controlador.Operadora;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -81,6 +82,12 @@ public class Recuperacuenta extends javax.swing.JPanel {
         });
         add(volver, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 420, 138, 48));
         add(usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 220, 183, -1));
+
+        palabrarecu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                palabrarecuKeyPressed(evt);
+            }
+        });
         add(palabrarecu, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 300, 183, -1));
 
         marcaagua.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 11)); // NOI18N
@@ -99,6 +106,10 @@ public class Recuperacuenta extends javax.swing.JPanel {
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         validar();
     }//GEN-LAST:event_aceptarActionPerformed
+
+    private void palabrarecuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_palabrarecuKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) validar();
+    }//GEN-LAST:event_palabrarecuKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

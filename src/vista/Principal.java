@@ -5,6 +5,7 @@
  */
 package vista;
 import controlador.Archivar;
+import controlador.Logica;
 import controlador.Operadora;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -109,13 +110,6 @@ public class Principal extends javax.swing.JFrame {
                 new Principal().setVisible(true);
             }
         });
-
-         
-         
-         
-         
-
-        
         
     }
 

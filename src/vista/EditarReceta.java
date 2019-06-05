@@ -5,8 +5,12 @@
  */
 package vista;
 
+import controlador.Archivar;
 import controlador.Operadora;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import modelo.Receta;
 
 /**
  *
@@ -14,13 +18,26 @@ import javax.swing.JOptionPane;
  */
 public class EditarReceta extends javax.swing.JPanel {
     private Principal principal;
+    private Archivar archivar;
     private Operadora operadora;
     /**
      * Creates new form AñadirReceta
      */
     public EditarReceta(Principal principal) {
         this.principal=principal;
+        this.archivar=new Archivar();
         initComponents();
+        
+        ArrayList<Receta> receta= new ArrayList <Receta>();
+        archivar.traerRcetas(principal.getUsuariotem());
+        receta = archivar.getRecetasDeUsuario();
+        nombre.setText(receta.get(principal.getUbicacion()).getNombre());
+        ingredientes.setText(receta.get(principal.getUbicacion()).getIngredientes());
+        preparacion.setText(receta.get(principal.getUbicacion()).getPreparacion());
+        descripcion.setText(receta.get(principal.getUbicacion()).getDescripcion());
+        
+        cantplatos.setText(Integer.toString(receta.get(principal.getUbicacion()).getCantidadDePersonas()));
+        
     }
 
     /**
@@ -33,7 +50,7 @@ public class EditarReceta extends javax.swing.JPanel {
     private void initComponents() {
 
         configusuario = new javax.swing.JButton();
-        buscartxt = new javax.swing.JTextField();
+        buscador = new javax.swing.JTextField();
         buscar = new javax.swing.JButton();
         nombretxt = new javax.swing.JLabel();
         marcaagua = new javax.swing.JLabel();
@@ -67,7 +84,13 @@ public class EditarReceta extends javax.swing.JPanel {
             }
         });
         add(configusuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 280, -1));
-        add(buscartxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(519, 10, 140, 40));
+
+        buscador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                buscadorKeyPressed(evt);
+            }
+        });
+        add(buscador, new org.netbeans.lib.awtextra.AbsoluteConstraints(519, 10, 140, 40));
 
         buscar.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         buscar.setForeground(new java.awt.Color(0, 51, 153));
@@ -90,6 +113,16 @@ public class EditarReceta extends javax.swing.JPanel {
         add(marcaagua, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 580, 80, -1));
 
         nombre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        nombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nombreActionPerformed(evt);
+            }
+        });
+        nombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nombreKeyTyped(evt);
+            }
+        });
         add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, 190, 30));
 
         ingredientestxt.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
@@ -123,6 +156,11 @@ public class EditarReceta extends javax.swing.JPanel {
         guardar.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
         guardar.setForeground(new java.awt.Color(0, 51, 153));
         guardar.setText("Guardar");
+        guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarActionPerformed(evt);
+            }
+        });
         add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 540, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
@@ -152,7 +190,14 @@ public class EditarReceta extends javax.swing.JPanel {
         txtcantidadpersonas.setText("Cantidad de personas");
         add(txtcantidadpersonas, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 470, 200, 50));
 
-        cantplatos.setText("solo numeros");
+        cantplatos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cantplatosKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                cantplatosKeyTyped(evt);
+            }
+        });
         add(cantplatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 470, 210, 40));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/fondo3.jpg"))); // NOI18N
@@ -171,10 +216,38 @@ public class EditarReceta extends javax.swing.JPanel {
         busqueda();
     }//GEN-LAST:event_buscarActionPerformed
 
+    private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
+        modificar();
+    }//GEN-LAST:event_guardarActionPerformed
+
+    private void cantplatosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cantplatosKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if(c<'0' || c>'9') evt.consume();
+    }//GEN-LAST:event_cantplatosKeyTyped
+
+    private void nombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nombreActionPerformed
+
+    private void nombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombreKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if((c<'a' || c>'z') &&(c<'A' || c>'z')) evt.consume();
+    }//GEN-LAST:event_nombreKeyTyped
+
+    private void buscadorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscadorKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) busqueda();
+    }//GEN-LAST:event_buscadorKeyPressed
+
+    private void cantplatosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cantplatosKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) modificar();
+    }//GEN-LAST:event_cantplatosKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField buscador;
     private javax.swing.JButton buscar;
-    private javax.swing.JTextField buscartxt;
     private javax.swing.JButton cancelar;
     private javax.swing.JTextField cantplatos;
     private javax.swing.JButton configusuario;
@@ -203,16 +276,23 @@ public class EditarReceta extends javax.swing.JPanel {
     }
     private void busqueda() {
         this.operadora=new Operadora();
-        int p;
-        if(buscar.getText().equals("")){
+        int p,j;
+        if(buscador.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Lo sentimos no has escrito un nombre");
         }else{
-            p=operadora.getLogica().buscarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), buscar.getText());
-            if(-1 == p){
+            p=operadora.getLogica().buscarReceta(principal.getUsuariotem(), buscador.getText());
+            j=operadora.getLogica().buscarrecetapersona(principal.getUsuariotem(), buscador.getText());
+            if(-1 == p && -1==j){
                 JOptionPane.showMessageDialog(null, "no existe");
             }else{
-                principal.setUbicacion(p);
-                principal.setNombrerec(buscar.getText());
+                if(p!=-1){
+                    principal.settipo("alcatraz");
+                    principal.setUbicacion(p);
+                }else if(j!=1){
+                    principal.settipo("otro");
+                    principal.setUbicacion(j);
+                }
+                principal.setNombrerec(buscador.getText());
                 principal.irMostrarReceta(this);
             }
         }
@@ -220,5 +300,24 @@ public class EditarReceta extends javax.swing.JPanel {
     }
     private void volver() {
         principal.irMisRecetas(this);
+    }
+
+    private void modificar() {
+        if(nombre.getText().equals("") || ingredientes.getText().equals("") || preparacion.getText().equals("") || descripcion.getText().equals("") || cantplatos.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Tienes alguna casilla vacia");
+        }else{
+            ArrayList<Receta> receta= new ArrayList <Receta>();
+            archivar.traerRcetas(principal.getUsuariotem());
+            receta = archivar.getRecetasDeUsuario();
+            
+            receta.get(principal.getUbicacion()).setNombre(nombre.getText());
+            receta.get(principal.getUbicacion()).setIngredientes(ingredientes.getText());
+            receta.get(principal.getUbicacion()).setPreparacion(preparacion.getText());
+            receta.get(principal.getUbicacion()).setDescripcion(descripcion.getText());
+            receta.get(principal.getUbicacion()).setCantidadDePersonas(Integer.parseInt(cantplatos.getText()));
+            archivar.sobreEscribirReceta(principal.getUsuariotem(), receta);
+            principal.irMisRecetas(this);
+            //operadora.getLogica().editarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), receta.get(principal.getUbicacion()).getNombre() , listaDeEdiciones);
+        }
     }
 }

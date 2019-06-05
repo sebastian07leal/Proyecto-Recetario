@@ -6,6 +6,7 @@
 package vista;
 
 import controlador.Operadora;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -101,6 +102,12 @@ public class Registrarse extends javax.swing.JPanel {
         recu.setForeground(new java.awt.Color(255, 255, 255));
         recu.setText("Recuperacion");
         add(recu, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 130, 20));
+
+        palabrarecuperacion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                palabrarecuperacionKeyPressed(evt);
+            }
+        });
         add(palabrarecuperacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 420, 210, -1));
 
         aceptar.setBackground(new java.awt.Color(204, 0, 51));
@@ -149,6 +156,10 @@ public class Registrarse extends javax.swing.JPanel {
     private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
         volver();
     }//GEN-LAST:event_regresarActionPerformed
+
+    private void palabrarecuperacionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_palabrarecuperacionKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) verificar();
+    }//GEN-LAST:event_palabrarecuperacionKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -5,9 +5,13 @@
  */
 package vista;
 
+import controlador.Archivar;
 import controlador.Operadora;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.Receta;
 
 /**
  *
@@ -16,18 +20,30 @@ import javax.swing.table.DefaultTableModel;
 public class Recetas extends javax.swing.JPanel {
     DefaultTableModel modelo;
     Principal principal;
+    private Archivar archivar;
     private Operadora operadora;
     /**
      * Creates new form Recetas
      */
     public Recetas(Principal principal) {
         this.principal=principal;
+        this.archivar=new Archivar();
+        
         initComponents();
         modelo= new DefaultTableModel();
         modelo.addColumn("Nombre");
         modelo.addColumn("descripcion");
         this.jTable1.setModel(modelo);
+        archivar.traerRcetas("Admin");
+        ArrayList<Receta> receta= new ArrayList <Receta>();
+        receta = archivar.getRecetasDeUsuario();
         
+        for (int i = 0; i < receta.size(); i++) {
+            String []almacenar= new String[2];
+            almacenar[0]=receta.get(i).getNombre();
+            almacenar[1]=receta.get(i).getDescripcion();
+            modelo.addRow(almacenar);
+        }
     }
 
     /**
@@ -63,6 +79,11 @@ public class Recetas extends javax.swing.JPanel {
         add(configusuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 300, -1));
 
         buscador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        buscador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                buscadorKeyPressed(evt);
+            }
+        });
         add(buscador, new org.netbeans.lib.awtextra.AbsoluteConstraints(519, 10, 140, 40));
 
         buscar.setBackground(new java.awt.Color(153, 153, 153));
@@ -98,6 +119,11 @@ public class Recetas extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         recetas.setViewportView(jTable1);
 
         add(recetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 710, -1));
@@ -151,6 +177,16 @@ public class Recetas extends javax.swing.JPanel {
         busqueda();
     }//GEN-LAST:event_buscarActionPerformed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        principal.setUbicacion(jTable1.getSelectedRow());
+        principal.settipo("alcatraz");
+        principal.irMostrarReceta(this);
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void buscadorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscadorKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) busqueda();
+    }//GEN-LAST:event_buscadorKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField buscador;
@@ -170,15 +206,22 @@ public class Recetas extends javax.swing.JPanel {
     }
     private void busqueda() {
         this.operadora=new Operadora();
-        int p;
+        int p,j;
         if(buscador.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Lo sentimos no has escrito un nombre");
         }else{
-            p=operadora.getLogica().buscarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), buscador.getText());
-            if(-1 == p){
+            p=operadora.getLogica().buscarReceta(principal.getUsuariotem(), buscador.getText());
+            j=operadora.getLogica().buscarrecetapersona(principal.getUsuariotem(), buscador.getText());
+            if(-1 == p && -1==j){
                 JOptionPane.showMessageDialog(null, "no existe");
             }else{
-                principal.setUbicacion(p);
+                if(p!=-1){
+                    principal.settipo("alcatraz");
+                    principal.setUbicacion(p);
+                }else if(j!=1){
+                    principal.settipo("otro");
+                    principal.setUbicacion(j);
+                }
                 principal.setNombrerec(buscador.getText());
                 principal.irMostrarReceta(this);
             }

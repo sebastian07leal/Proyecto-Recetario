@@ -6,6 +6,7 @@
 package vista;
 
 import controlador.Operadora;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -73,12 +74,22 @@ public class Configcuenta extends javax.swing.JPanel {
         add(contraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 111, 223, 39));
 
         conficontra.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        conficontra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                conficontraKeyPressed(evt);
+            }
+        });
         add(conficontra, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 168, 223, 39));
 
         palbrarecu.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         add(palbrarecu, new org.netbeans.lib.awtextra.AbsoluteConstraints(354, 299, 221, 37));
 
         confipalabra.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        confipalabra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                confipalabraKeyPressed(evt);
+            }
+        });
         add(confipalabra, new org.netbeans.lib.awtextra.AbsoluteConstraints(354, 347, 221, 37));
 
         contraseñatxt.setFont(new java.awt.Font("Sitka Text", 0, 18)); // NOI18N
@@ -107,6 +118,11 @@ public class Configcuenta extends javax.swing.JPanel {
         add(contraseñaactualtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(101, 461, -1, -1));
 
         contraseñaactual.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        contraseñaactual.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                contraseñaactualKeyPressed(evt);
+            }
+        });
         add(contraseñaactual, new org.netbeans.lib.awtextra.AbsoluteConstraints(306, 459, 233, 31));
 
         eliminar.setBackground(new java.awt.Color(204, 0, 51));
@@ -177,6 +193,18 @@ public class Configcuenta extends javax.swing.JPanel {
     private void guardarpalabraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarpalabraActionPerformed
         cambiopalabra();
     }//GEN-LAST:event_guardarpalabraActionPerformed
+
+    private void conficontraKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_conficontraKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) cambiocontraseña();
+    }//GEN-LAST:event_conficontraKeyPressed
+
+    private void confipalabraKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_confipalabraKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) cambiopalabra();
+    }//GEN-LAST:event_confipalabraKeyPressed
+
+    private void contraseñaactualKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contraseñaactualKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) eliminarcuenta();
+    }//GEN-LAST:event_contraseñaactualKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

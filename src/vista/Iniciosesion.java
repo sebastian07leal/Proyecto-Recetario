@@ -5,6 +5,7 @@
  */
 package vista;
 
+import com.sun.glass.events.KeyEvent;
 import controlador.Archivar;
 import controlador.Operadora;
 import javax.swing.JOptionPane;
@@ -56,12 +57,12 @@ public class Iniciosesion extends javax.swing.JPanel {
         Olvicontra.setForeground(new java.awt.Color(255, 255, 255));
         Olvicontra.setText("Olvido su contraseña");
         Olvicontra.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 OlvicontraAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         Olvicontra.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -86,6 +87,12 @@ public class Iniciosesion extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Contraseña");
         add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 130, -1));
+
+        contraseña.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                contraseñaKeyPressed(evt);
+            }
+        });
         add(contraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 310, 170, -1));
 
         logear.setBackground(new java.awt.Color(204, 0, 51));
@@ -131,6 +138,11 @@ public class Iniciosesion extends javax.swing.JPanel {
     private void OlvicontraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OlvicontraMouseClicked
         recupera();
     }//GEN-LAST:event_OlvicontraMouseClicked
+
+    private void contraseñaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contraseñaKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) entrar();
+    }//GEN-LAST:event_contraseñaKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

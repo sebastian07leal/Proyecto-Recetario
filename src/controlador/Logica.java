@@ -2,13 +2,16 @@ package controlador;
 
 import java.util.*;
 import modelo.*;
+import vista.Principal;
 
 public class Logica {
 
     //Este objeto nos permite conectarnos con la clase menu
     private Archivar archivar; 
+    private Principal principal;
     //Variables reales; 
     private int posicionDelUsuario;
+    private int resultadoss;
     private String nombreRecibido;
     private String contrasenaRecibida;
     private String confirmContrasena;
@@ -26,8 +29,7 @@ public class Logica {
     public boolean validarInicoDeSesion(String usuarioEnviado, String contrasenaEnviada) {
         archivar = new Archivar(); 
         archivar.traerListadoDeUsuarios();  //Es obligatorio llamar a este metodo para poder acceder a la lista de usuarios 
-        boolean respuesta = false; 
-
+        boolean respuesta = false;         
         //Si entra en este if significa que el usuario existe 
         if (buscarUsuario(usuarioEnviado) == true) {
             //Este if valida que la contraseña ingresada sea correcta
@@ -232,23 +234,24 @@ public class Logica {
         return respuestaMenu;
     }
 
-    public boolean eliminarR(int indiceUsuario, String nombreReceta) {
+    public boolean eliminarR(String nombre, String nombreReceta) {
         archivar = new Archivar(); 
+        principal=new Principal();
         Usuario nombreUser;
         boolean respuestaMenu = false;
         int indiceReseta;
         //Antes de poder traer las recetas del usuario, es necesario conocer el nombre del usuario
-        nombreUser = objetoUsuarioEnIndice(indiceUsuario);
+        
         //Para poder editar la lista de recetas del usuario se traen el archivo correspondiente
-        archivar.traerRcetas(nombreUser.getNombre());
+        archivar.traerRcetas(principal.getUsuariotem());
         //Se verifica la existenncia y la ubicacion de la receta, mediante su nombre
-        indiceReseta = buscarReceta(indiceUsuario, nombreReceta);
+        indiceReseta = buscarrecetapersona(nombre, nombreReceta);
         if (indiceReseta != -1) {
             //Se trae el arrayList que contiene las  recetas 
             listaRecetas = archivar.getRecetasDeUsuario();
             this.listaRecetas.remove(indiceReseta);
             //Despues de eliminar es necesario guardar los cambios hechos en la lista
-            respuestaMenu = archivar.sobreEscribirReceta(nombreUser.getNombre(), this.listaRecetas);
+            respuestaMenu = archivar.sobreEscribirReceta(nombre, this.listaRecetas);
         } else {
             System.out.println("Error no se encontro el nombre de la receta");
             respuestaMenu = false;
@@ -278,33 +281,36 @@ public class Logica {
         return respuesta;
     }
     //Este metodo busca la receta por su nombre y devuelve la posicion en la que este, si no existe devuelve -1 como resultado
-    public int buscarReceta(int indiceUsuario, String nombreReceta) {
+    public int buscarReceta(String usuario, String nombreReceta) {
         archivar = new Archivar(); 
+        principal= new Principal();
         archivar.traerRcetas("Admin");
         listaRecetaAdmin = archivar.getRecetasDeUsuario();
         int posicionR = -1;
-        Usuario nombreUsuario;
-        //Se trae el nombre del usuario
-        nombreUsuario = objetoUsuarioEnIndice(indiceUsuario);
-        //Se trae la lista de recetas 
-        archivar.traerRcetas(nombreUsuario.getNombre()); //Trae  las recetas
-        listaRecetas = archivar.getRecetasDeUsuario();
-        //Busca dentro de la recetas globales
+       
         for (int j = 0; j < listaRecetaAdmin.size(); j++) {
             if (listaRecetaAdmin.get(j).getNombre().equals(nombreReceta)) {
                 posicionR = j;  //Envia cual es la poscion del usuario encontrado
+                principal.settipo("alcatraz");
+                resultadoss=1;
                 break; //Este break es necesario para que el ciclo deje de iterar apenas encuentre un indice con el nombre de la receta
-            } else {
-                posicionR = -1; 
-             }            
+            }            
         }
-        //Recorre todos los obgetos del ArrayList
+        System.out.println("el tipo que mande: "+ principal.gettipo());
+        return posicionR;
+    }
+    public int buscarrecetapersona(String usuario, String nombreReceta){
+        archivar = new Archivar(); 
+        principal= new Principal();
+        archivar.traerRcetas(usuario);
+        listaRecetas = archivar.getRecetasDeUsuario();
+        int posicionR = -1;
         for (int i = 0; i < listaRecetas.size(); i++) {
             if (listaRecetas.get(i).getNombre().equals(nombreReceta)) {
                 posicionR = i;  //Envia cual es la poscion del usuario encontrado
+                principal.settipo("otro");
+                resultadoss=2;
                 break; //Este break es necesario para que el ciclo deje de iterar apenas encuentre un indice con el nombre de la receta
-            } else {
-                posicionR = -1;
             }
         }
         return posicionR;
@@ -359,11 +365,12 @@ public class Logica {
     public boolean editarReceta(int indiceUsuario, String nombreReceta, String[] listaDeEdiciones) {
         boolean errorGuardar = false;
         boolean respuesta = false; 
+        principal=new Principal();
         archivar = new Archivar(); 
         usuario = objetoUsuarioEnIndice(indiceUsuario); //Se trae el obgeto usuario
         archivar.traerRcetas(usuario.getNombre()); //Se traenlas recetas del usuario para modificar
         //Es necesario concoer el indice de la receta
-        int posicionReceta = buscarReceta(indiceUsuario, nombreReceta);
+        int posicionReceta = buscarReceta(principal.getUsuariotem(), nombreReceta);
         //Se guardaran los datos optenidos en del array
         int racionEntero;
         listaRecetas = (ArrayList<Receta>) archivar.getRecetasDeUsuario().clone();  //Se crea una copia de la lista de usuarios para modificar
@@ -438,10 +445,8 @@ public class Logica {
         Archivar archivar = new Archivar(); 
         boolean respuesta = false;
         archivar.traerTips();
-        //
-        
+
         if (archivar.guardarTips(tips)) {
-            System.out.println("Envio true");
         }else{
             System.out.println("Error al guardar //Logica");
         }
@@ -487,6 +492,14 @@ public class Logica {
     }
     public void setListaRecetas(ArrayList<Receta> listaReceta) {
         this.listaRecetas = listaReceta;
+    }
+
+    public int getResultadoss() {
+        return resultadoss;
+    }
+
+    public void setResultadoss(int resultadoss) {
+        this.resultadoss = resultadoss;
     }
     
 }

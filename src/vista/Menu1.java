@@ -6,6 +6,7 @@
 package vista;
 
 import controlador.Operadora;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -85,6 +86,11 @@ public class Menu1 extends javax.swing.JPanel {
         add(buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 120, 40));
 
         buscador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        buscador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                buscadorKeyPressed(evt);
+            }
+        });
         add(buscador, new org.netbeans.lib.awtextra.AbsoluteConstraints(519, 10, 140, 40));
 
         misrecetas.setBackground(new java.awt.Color(153, 153, 153));
@@ -177,6 +183,10 @@ public class Menu1 extends javax.swing.JPanel {
         busqueda();
     }//GEN-LAST:event_buscarActionPerformed
 
+    private void buscadorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscadorKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) busqueda();
+    }//GEN-LAST:event_buscadorKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton añadirre;
@@ -200,15 +210,22 @@ public class Menu1 extends javax.swing.JPanel {
     }
     private void busqueda() {
         this.operadora=new Operadora();
-        int p;
+        int p,j;
         if(buscador.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Lo sentimos no has escrito un nombre");
         }else{
-            p=operadora.getLogica().buscarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), buscador.getText());
-            if(-1 == p){
+            p=operadora.getLogica().buscarReceta(principal.getUsuariotem(), buscador.getText());
+            j=operadora.getLogica().buscarrecetapersona(principal.getUsuariotem(), buscador.getText());
+            if(-1 == p && -1==j){
                 JOptionPane.showMessageDialog(null, "no existe");
             }else{
-                principal.setUbicacion(p);
+                if(p!=-1){
+                    principal.settipo("alcatraz");
+                    principal.setUbicacion(p);
+                }else if(j!=1){
+                    principal.settipo("otro");
+                    principal.setUbicacion(j);
+                }
                 principal.setNombrerec(buscador.getText());
                 principal.irMostrarReceta(this);
             }

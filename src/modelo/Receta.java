@@ -32,12 +32,11 @@ public class Receta implements Serializable {
 
     @Override
     public String toString() {
-        return "\n***" + "El nombre de la receta es: '" + nombre
-                + "', \nLos ingredientes de la receta son: '" + ingredientes
-                + "', \nLa preparacion de la receta es: '" + preparacion
-                + "',\nLa descripcion de la receta es: '" + descripcion
-                + "',\nLa cantidad de personas por racion: " + cantidadDePersonas + "***\n";
+        return "Receta{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", ingredientes=" + ingredientes + ", preparacion=" + preparacion + ", favoritos=" + favoritos + ", cantidadDePersonas=" + cantidadDePersonas + ", propia=" + propia + '}';
     }
+
+    
+    
 
     //Get Y Set permiten aceder y modificar los parametros de esta clase a excepción del id, el cual solo permite ver
     public int getId() {

@@ -5,8 +5,10 @@
  */
 package vista;
 
+import controlador.Archivar;
 import controlador.Operadora;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import modelo.Receta;
 
 /**
@@ -14,19 +16,39 @@ import modelo.Receta;
  * @author DUARTE MENDEZ
  */
 public class MostrarReceta extends javax.swing.JPanel {
-    private Principal principal;
+    protected Principal principal;
+    private Archivar archivar;
     private Operadora operadora;
     /**
      * Creates new form MostrarReceta
      */
     public MostrarReceta(Principal principal) {
+        this.principal= principal;
         this.operadora=new Operadora();
-        this.principal=principal;
-        String nombr= principal.getNombrerec();
-        
-        ArrayList<Receta> listaRecetas;
+        this.archivar=new Archivar();
+        ArrayList<Receta> receta= new ArrayList <Receta>();
         initComponents();
-        System.out.println(operadora.getLogica().verResultadoBusqueda(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), principal.getUbicacion()));
+        System.out.println("principal ubicacion " +this.principal.getUbicacion() + "\nTipo que recibe:_ "+ operadora.getLogica().getResultadoss()+"\nusuario: "+ principal.getUsuariotem());
+        if(principal.gettipo().equals("alcatraz")){
+            archivar.traerRcetas("Admin");
+        }else{
+            archivar.traerRcetas(principal.getUsuariotem());
+        }
+        System.out.println("principal ubicacion " +principal.getUbicacion() + "\nUsuario:_ "+principal.gettipo());
+        receta = archivar.getRecetasDeUsuario();
+        nombre.setText(receta.get(principal.getUbicacion()).getNombre());
+        ingredientes.setText(receta.get(principal.getUbicacion()).getIngredientes());
+        ingredientes.enable(false);
+        preparacion.setText(receta.get(principal.getUbicacion()).getPreparacion());
+        preparacion.enable(false);
+        descripcion.setText(receta.get(principal.getUbicacion()).getDescripcion());
+        descripcion.enable(false);
+        cantidadplatos.setText(Integer.toString(receta.get(principal.getUbicacion()).getCantidadDePersonas()));
+        
+            
+        
+        
+        
     }
 
     /**
@@ -42,14 +64,15 @@ public class MostrarReceta extends javax.swing.JPanel {
         misrecetas = new javax.swing.JButton();
         recetas = new javax.swing.JButton();
         menu = new javax.swing.JButton();
-        editarreceta = new javax.swing.JButton();
         añadirrecetas = new javax.swing.JButton();
         nombre = new javax.swing.JLabel();
-        ingredientes = new javax.swing.JLabel();
-        preparacion = new javax.swing.JLabel();
-        descripcion = new javax.swing.JLabel();
         cantidadplatos = new javax.swing.JLabel();
-        titulo = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        ingredientes = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        preparacion = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        descripcion = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -74,7 +97,7 @@ public class MostrarReceta extends javax.swing.JPanel {
                 misrecetasActionPerformed(evt);
             }
         });
-        add(misrecetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 380, 110, -1));
+        add(misrecetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 390, 110, -1));
 
         recetas.setBackground(new java.awt.Color(255, 204, 0));
         recetas.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
@@ -85,7 +108,7 @@ public class MostrarReceta extends javax.swing.JPanel {
                 recetasActionPerformed(evt);
             }
         });
-        add(recetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 420, 110, -1));
+        add(recetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 440, 110, -1));
 
         menu.setBackground(new java.awt.Color(255, 204, 0));
         menu.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
@@ -96,18 +119,7 @@ public class MostrarReceta extends javax.swing.JPanel {
                 menuActionPerformed(evt);
             }
         });
-        add(menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 460, 110, -1));
-
-        editarreceta.setBackground(new java.awt.Color(255, 204, 0));
-        editarreceta.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
-        editarreceta.setForeground(new java.awt.Color(0, 51, 153));
-        editarreceta.setText("EditarReceta");
-        editarreceta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editarrecetaActionPerformed(evt);
-            }
-        });
-        add(editarreceta, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 500, 110, -1));
+        add(menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 490, 110, -1));
 
         añadirrecetas.setBackground(new java.awt.Color(255, 204, 0));
         añadirrecetas.setFont(new java.awt.Font("Sitka Text", 1, 11)); // NOI18N
@@ -120,26 +132,38 @@ public class MostrarReceta extends javax.swing.JPanel {
         });
         add(añadirrecetas, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 540, 110, -1));
 
-        nombre.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        nombre.setText("titulo");
-        add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 80, 40));
+        nombre.setFont(new java.awt.Font("Sitka Text", 1, 36)); // NOI18N
+        add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 40, 530, 40));
 
-        ingredientes.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        ingredientes.setText("ingredts");
-        add(ingredientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, 600, 70));
+        cantidadplatos.setFont(new java.awt.Font("Sitka Text", 1, 36)); // NOI18N
+        add(cantidadplatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 460, 210, 60));
 
-        preparacion.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        preparacion.setText("preparacion");
-        add(preparacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 600, 70));
+        ingredientes.setBackground(new java.awt.Color(240, 240, 240));
+        ingredientes.setColumns(1);
+        ingredientes.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
+        ingredientes.setForeground(new java.awt.Color(240, 240, 240));
+        ingredientes.setRows(5);
+        jScrollPane1.setViewportView(ingredientes);
 
-        descripcion.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        descripcion.setText("descripcion");
-        add(descripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 309, 600, 60));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 750, 80));
 
-        cantidadplatos.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        cantidadplatos.setText("cantidad de platos");
-        add(cantidadplatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 420, 150, 60));
-        add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 190, 30));
+        preparacion.setBackground(new java.awt.Color(240, 240, 240));
+        preparacion.setColumns(20);
+        preparacion.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
+        preparacion.setForeground(new java.awt.Color(240, 240, 240));
+        preparacion.setRows(5);
+        jScrollPane2.setViewportView(preparacion);
+
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 750, 90));
+
+        descripcion.setBackground(new java.awt.Color(240, 240, 240));
+        descripcion.setColumns(20);
+        descripcion.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
+        descripcion.setForeground(new java.awt.Color(240, 240, 240));
+        descripcion.setRows(5);
+        jScrollPane3.setViewportView(descripcion);
+
+        add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 620, 110));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/Fondotenue22.jpg"))); // NOI18N
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 600));
@@ -161,10 +185,6 @@ public class MostrarReceta extends javax.swing.JPanel {
         menu();
     }//GEN-LAST:event_menuActionPerformed
 
-    private void editarrecetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarrecetaActionPerformed
-        erecetas();
-    }//GEN-LAST:event_editarrecetaActionPerformed
-
     private void añadirrecetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadirrecetasActionPerformed
         arecetas();
     }//GEN-LAST:event_añadirrecetasActionPerformed
@@ -173,17 +193,18 @@ public class MostrarReceta extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton añadirrecetas;
     private javax.swing.JLabel cantidadplatos;
-    private javax.swing.JLabel descripcion;
-    private javax.swing.JButton editarreceta;
-    private javax.swing.JLabel ingredientes;
+    private javax.swing.JTextArea descripcion;
+    private javax.swing.JTextArea ingredientes;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JButton menu;
     private javax.swing.JButton misrecetas;
     private javax.swing.JLabel nombre;
-    private javax.swing.JLabel preparacion;
+    private javax.swing.JTextArea preparacion;
     private javax.swing.JButton recetas;
     private javax.swing.JButton tips;
-    private javax.swing.JTextField titulo;
     // End of variables declaration//GEN-END:variables
 
     private void tips() {
@@ -202,9 +223,6 @@ public class MostrarReceta extends javax.swing.JPanel {
         principal.irmenu(this);
    }
 
-    private void erecetas() {
-        principal.irEditarReceta(this);
-    }
 
     private void arecetas() {
         principal.irAñadirreceta(this);

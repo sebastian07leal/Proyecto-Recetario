@@ -1,6 +1,7 @@
 package vista;
 
 import controlador.Operadora;
+import java.awt.event.KeyEvent;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -56,6 +57,11 @@ public class Tips extends javax.swing.JPanel {
         add(configusuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 300, -1));
 
         buscador.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        buscador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                buscadorKeyPressed(evt);
+            }
+        });
         add(buscador, new org.netbeans.lib.awtextra.AbsoluteConstraints(519, 10, 140, 40));
 
         buscar.setBackground(new java.awt.Color(153, 153, 153));
@@ -109,6 +115,12 @@ public class Tips extends javax.swing.JPanel {
             }
         });
         add(volver, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 550, 160, 30));
+
+        tipsintroducir.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tipsintroducirKeyPressed(evt);
+            }
+        });
         add(tipsintroducir, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 400, 30));
 
         jLabel1.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
@@ -195,6 +207,16 @@ public class Tips extends javax.swing.JPanel {
         relogear();
     }//GEN-LAST:event_eliminarActionPerformed
 
+    private void buscadorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscadorKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) busqueda();
+    }//GEN-LAST:event_buscadorKeyPressed
+
+    private void tipsintroducirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tipsintroducirKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER) añadir();
+    }//GEN-LAST:event_tipsintroducirKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton añadir;
@@ -215,15 +237,22 @@ public class Tips extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
     private void busqueda() {
         this.operadora=new Operadora();
-        int p;
+        int p,j;
         if(buscador.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Lo sentimos no has escrito un nombre");
         }else{
-            p=operadora.getLogica().buscarReceta(operadora.getLogica().ubicacionDeUsuarioPorIndice(principal.getUsuariotem()), buscador.getText());
-            if(-1 == p){
+            p=operadora.getLogica().buscarReceta(principal.getUsuariotem(), buscador.getText());
+            j=operadora.getLogica().buscarrecetapersona(principal.getUsuariotem(), buscador.getText());
+            if(-1 == p && -1==j){
                 JOptionPane.showMessageDialog(null, "no existe");
             }else{
-                principal.setUbicacion(p);
+                if(p!=-1){
+                    principal.settipo("alcatraz");
+                    principal.setUbicacion(p);
+                }else if(j!=1){
+                    principal.settipo("otro");
+                    principal.setUbicacion(j);
+                }
                 principal.setNombrerec(buscador.getText());
                 principal.irMostrarReceta(this);
             }
@@ -254,7 +283,7 @@ public class Tips extends javax.swing.JPanel {
                 String uno= tipsintroducir.getText();
                 guardar.add(uno);
                 operadora.getLogica().guardarTips(guardar);
-                JOptionPane.showMessageDialog(null, "Agregado con exito con exito vuelve a entrar a tips para verlo");
+                JOptionPane.showMessageDialog(null, "Agregado con exito con exito");
             }else{
                 JOptionPane.showMessageDialog(null, "Es demasiado largo");
             }
@@ -270,14 +299,13 @@ public class Tips extends javax.swing.JPanel {
             int obtener= tipsintroducir.getText().length();
             if(obtener <= 80){
                 if(fila>=0){
-                    System.out.println(fila);
                     ArrayList<String> guardar= new ArrayList<String>();
                     guardar= operadora.getLogica().traerTips();
                     String uno= tipsintroducir.getText();
                     guardar.remove(fila);
                     guardar.add(fila, uno);
                     operadora.getLogica().guardarTips(guardar);
-                    JOptionPane.showMessageDialog(null, "Editado con exito vuelve a entrar a tips para verlo");
+                    JOptionPane.showMessageDialog(null, "Exito al editar");
                 }else{
                     JOptionPane.showMessageDialog(null, "Porfavor selecciona una fila");
                 }
@@ -289,16 +317,16 @@ public class Tips extends javax.swing.JPanel {
 
     private void elminar() {
         
-        int fila = jTable1.getSelectedRow();
-        if(fila<0){
-            JOptionPane.showMessageDialog(null, "porfavor seleccione una fila");
-        }else{
-            System.out.println(fila);
-            ArrayList<String> guardar= new ArrayList<String>();
-            guardar= operadora.getLogica().traerTips();            
-            guardar.remove(fila);            
-            operadora.getLogica().guardarTips(guardar);
-        }
+            int fila = jTable1.getSelectedRow();
+            if(fila<0){
+                JOptionPane.showMessageDialog(null, "porfavor seleccione una fila");
+            }else{
+                System.out.println(fila);
+                ArrayList<String> guardar= new ArrayList<String>();
+                guardar= operadora.getLogica().traerTips();            
+                guardar.remove(fila);            
+                operadora.getLogica().guardarTips(guardar);
+            }  
     }
 
     private void relogear() {
